@@ -8,7 +8,7 @@ Repository 自身只关心“如何写入”，而“哪些写操作要放在同
 问数链路运行时也会从这里读取元数据，用来把召回到的 id 补齐成完整实体
 """
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.entities.column_info import ColumnInfo
@@ -28,6 +28,11 @@ class MetaMySQLRepository:
 
     def __init__(self, session: AsyncSession):
         self.session = session
+
+    async def clear_all(self):
+        """清空全部元数据，供知识库整体重建前调用"""
+        for table in ("column_metric", "metric_info", "column_info", "table_info"):
+            await self.session.execute(text(f"DELETE FROM {table}"))
 
     def save_table_infos(self, table_infos: list[TableInfo]):
         """批量保存表元数据。输入仍然是业务实体，而不是 ORM 模型"""

@@ -35,6 +35,11 @@ class ValueESRepository:
     def __init__(self, client: AsyncElasticsearch):
         self.client = client
 
+    async def drop_index(self):
+        """删除字段取值索引，供知识库整体重建前调用"""
+        if await self.client.indices.exists(index=self.index_name):
+            await self.client.indices.delete(index=self.index_name)
+
     async def ensure_index(self):
         """确保字段取值索引已经创建好"""
         if not await self.client.indices.exists(index=self.index_name):

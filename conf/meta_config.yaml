@@ -450,7 +450,7 @@ metrics:
       - fact_order.order_status
     alias: [实付销售额, 实收金额, 支付总额, 实付总额]
   - name: 净销售额
-    description: 扣除退款后的实付销售额。口径：有效订单（排除 已取消）的 pay_amount 之和，减去 fact_refund.refund_amount 之和。订单与退款是两张事实表，必须先各自按相同维度聚合，再合并相减，不能直接 JOIN 后求和，否则会重复计算。
+    description: 扣除退款后的实付销售额，按订单维度统计。口径：有效订单（排除 已取消）的 pay_amount 之和，减去这些订单对应的 fact_refund.refund_amount 之和，退款按订单归属到下单日期。一个订单至多有一笔退款，所以订单与退款表是一对一关系，按日期、地区、渠道、店铺、客户等订单级维度统计时可以直接用订单表 LEFT JOIN 退款表。注意：订单金额和退款都是订单级数据，没有分摊到商品的规则，因此不能按商品、品牌、品类统计净销售额，遇到这类问题应当说明口径不支持，而不是用商品明细金额近似。
     relevant_columns:
       - fact_order.pay_amount
       - fact_order.order_status

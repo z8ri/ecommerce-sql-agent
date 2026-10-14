@@ -259,8 +259,19 @@ class MetaKnowledgeService:
 
         await self.metric_qdrant_repository.upsert(ids, embeddings, payloads)
 
-    async def build(self, config_path: Path):
+    async def reset(self):
+        """清空 Meta MySQL、Qdrant 和 ES 中已有的元数据，让重复构建不会产生重复数据"""
+        async with self.meta_mysql_repository.session.begin():
+            await self.meta_mysql_repository.clear_all()
+        await self.column_qdrant_repository.drop_collection()
+        await self.metric_qdrant_repository.drop_collection()
+        await self.value_es_repository.drop_index()
+        logger.info("已清空已有元数据知识库")
+
+    async def build(self, config_path: Path, reset: bool = False):
         """读取配置并依次构建 Meta MySQL Qdrant 和 ES 中的元数据索引"""
+        if reset:
+            await self.reset()
         context = OmegaConf.load(config_path)
         schema = OmegaConf.structured(MetaConfig)
         meta_config: MetaConfig = OmegaConf.to_object(OmegaConf.merge(schema, context))

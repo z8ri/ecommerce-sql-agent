@@ -1,0 +1,1053 @@
+{
+ "name": "diag_gmv",
+ "created_at": "2026-10-14T16:34:07",
+ "records": [
+  {
+   "id": "b10",
+   "question": "25-34岁客户的客单价是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "客户",
+    "单价",
+    "25-34岁客户的客单价是多少？"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "下单客户数",
+    "GMV",
+    "连带率",
+    "平均评分",
+    "订单数",
+    "实付金额",
+    "好评率",
+    "用券订单占比",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_customer.age_group.25-34岁",
+    "dim_coupon.coupon_name.满200减25",
+    "dim_customer.age_group.45岁以上",
+    "dim_customer.age_group.35-44岁",
+    "dim_customer.age_group.18-24岁"
+   ],
+   "merged_tables": [
+    "fact_order_item",
+    "dim_product",
+    "dim_customer",
+    "fact_order",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order_item",
+    "dim_customer",
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order_item.item_amount",
+    "fact_order_item.order_id",
+    "dim_customer.age_group",
+    "dim_customer.customer_id",
+    "fact_order.customer_id",
+    "fact_order.order_id",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(fo.gross_amount) / COUNT(DISTINCT fo.order_id) AS 客单价\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE dc.age_group = '25-34岁' AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(fo.gross_amount) / COUNT(DISTINCT fo.order_id) AS 客单价\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE dc.age_group = '25-34岁' AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1465.647464
+    }
+   ],
+   "latency_s": 11.22,
+   "llm_calls": 6,
+   "input_tokens": 10882,
+   "output_tokens": 178,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "c03",
+   "question": "2025年的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年的客单价是多少？",
+    "单价"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "GMV",
+    "连带率",
+    "订单数",
+    "平均评分",
+    "实付金额",
+    "下单客户数",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_date",
+    "fact_traffic",
+    "dim_customer",
+    "dim_product"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.year = 2025",
+   "pred_rows": [
+    {
+     "客单价": 1442.484342
+    }
+   ],
+   "latency_s": 9.35,
+   "llm_calls": 6,
+   "input_tokens": 10441,
+   "output_tokens": 156,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "d03",
+   "question": "2025年双11大促期间的GMV是多少？",
+   "tags": [
+    "time",
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年双11大促期间的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "dim_date.holiday_name.618大促",
+    "dim_date.holiday_name.双11大促",
+    "dim_date.holiday_name.双12大促",
+    "dim_product.brand.奥迪双钻",
+    "dim_product.product_name.奥迪双钻玩具入门款",
+    "dim_product.product_name.奥迪双钻玩具限定款"
+   ],
+   "merged_tables": [
+    "dim_date",
+    "dim_coupon",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "fact_traffic",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.holiday_name",
+    "dim_date.date_id",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_date t1\nJOIN fact_order t2 ON t1.date_id = t2.date_id\nWHERE t1.holiday_name = '双11大促' AND t1.date_id >= 20250101 AND t1.date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_date t1\nJOIN fact_order t2 ON t1.date_id = t2.date_id\nWHERE t1.holiday_name = '双11大促' AND t1.date_id >= 20250101 AND t1.date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "GMV": 5634732.7
+    }
+   ],
+   "latency_s": 10.33,
+   "llm_calls": 6,
+   "input_tokens": 10968,
+   "output_tokens": 193,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "d05",
+   "question": "2025年周末的GMV占全年GMV的比例是多少？",
+   "tags": [
+    "time",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "比例",
+    "2025年周末的GMV占全年GMV的比例是多少？",
+    "GMV"
+   ],
+   "retrieved_metrics": [
+    "连带率",
+    "GMV",
+    "用券订单占比",
+    "新客订单占比",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率",
+    "好评率",
+    "退款率",
+    "优惠率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_traffic",
+    "fact_order",
+    "fact_order_item"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.is_weekend",
+    "dim_date.date_id",
+    "dim_date.year",
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  SUM(CASE WHEN d.is_weekend = 1 THEN f.pay_amount ELSE 0 END) / SUM(f.pay_amount) AS `2025年周末的GMV占全年GMV的比例`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  SUM(CASE WHEN d.is_weekend = 1 THEN f.pay_amount ELSE 0 END) / SUM(f.pay_amount) AS `2025年周末的GMV占全年GMV的比例`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "2025年周末的GMV占全年GMV的比例": 0.300205
+    }
+   ],
+   "latency_s": 11.08,
+   "llm_calls": 6,
+   "input_tokens": 9171,
+   "output_tokens": 204,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "d07",
+   "question": "今年每个季度的GMV分别是多少？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "今年每个季度的GMV分别是多少？",
+    "季度"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic",
+    "fact_refund",
+    "fact_order_item"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.quarter",
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  d.quarter AS 季度,\n  SUM(f.gross_amount) AS GMV\nFROM \n  fact_order f\nJOIN \n  dim_date d ON f.date_id = d.date_id\nWHERE \n  d.year = 2025 \n  AND f.order_status != '已取消'\nGROUP BY \n  d.quarter\nORDER BY \n  CASE d.quarter \n    WHEN 'Q1' THEN 1 \n    WHEN 'Q2' THEN 2 \n    WHEN 'Q3' THEN 3 \n    WHEN 'Q4' THEN 4 \n  END;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  d.quarter AS 季度,\n  SUM(f.gross_amount) AS GMV\nFROM \n  fact_order f\nJOIN \n  dim_date d ON f.date_id = d.date_id\nWHERE \n  d.year = 2025 \n  AND f.order_status != '已取消'\nGROUP BY \n  d.quarter\nORDER BY \n  CASE d.quarter \n    WHEN 'Q1' THEN 1 \n    WHEN 'Q2' THEN 2 \n    WHEN 'Q3' THEN 3 \n    WHEN 'Q4' THEN 4 \n  END;",
+   "pred_rows": [
+    {
+     "季度": "Q1",
+     "GMV": 10338528.17
+    },
+    {
+     "季度": "Q2",
+     "GMV": 15199933.82
+    },
+    {
+     "季度": "Q3",
+     "GMV": 11553586.35
+    },
+    {
+     "季度": "Q4",
+     "GMV": 16734611.07
+    }
+   ],
+   "latency_s": 9.48,
+   "llm_calls": 6,
+   "input_tokens": 8810,
+   "output_tokens": 238,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4
+  },
+  {
+   "id": "d10",
+   "question": "2025年每个月的GMV是多少？",
+   "tags": [
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年每个月的GMV是多少？",
+    "GMV"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  YEAR(d.date_id) AS 年份,\n  MONTH(d.date_id) AS 月份,\n  SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.date_id >= 20250101 AND d.date_id <= 20251231\n  AND f.order_status != '已取消'\nGROUP BY YEAR(d.date_id), MONTH(d.date_id)\nORDER BY 年份, 月份;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  YEAR(d.date_id) AS 年份,\n  MONTH(d.date_id) AS 月份,\n  SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.date_id >= 20250101 AND d.date_id <= 20251231\n  AND f.order_status != '已取消'\nGROUP BY YEAR(d.date_id), MONTH(d.date_id)\nORDER BY 年份, 月份;",
+   "pred_rows": [
+    {
+     "年份": 2025,
+     "月份": 1,
+     "GMV": 3434531.25
+    },
+    {
+     "年份": 2025,
+     "月份": 2,
+     "GMV": 3218425.16
+    },
+    {
+     "年份": 2025,
+     "月份": 3,
+     "GMV": 3514714.48
+    },
+    {
+     "年份": 2025,
+     "月份": 4,
+     "GMV": 3452482.05
+    },
+    {
+     "年份": 2025,
+     "月份": 5,
+     "GMV": 3560191.72
+    }
+   ],
+   "latency_s": 8.82,
+   "llm_calls": 6,
+   "input_tokens": 6909,
+   "output_tokens": 212,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 12
+  },
+  {
+   "id": "e01",
+   "question": "GMV最高的前5个省份是哪些？",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "省份",
+    "GMV",
+    "GMV最高的前5个省份是哪些？",
+    "最高"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_customer.register_channel.H5商城",
+    "dim_channel.channel_name.H5商城",
+    "dim_coupon.coupon_name.无门槛5元券"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "fact_traffic",
+    "dim_customer",
+    "dim_channel",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.province",
+    "dim_region.region_id",
+    "fact_order.region_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT d.province, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_region d ON f.region_id = d.region_id\nWHERE f.order_status != '已取消'\nGROUP BY d.province\nORDER BY GMV DESC\nLIMIT 5",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.province, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_region d ON f.region_id = d.region_id\nWHERE f.order_status != '已取消'\nGROUP BY d.province\nORDER BY GMV DESC\nLIMIT 5",
+   "pred_rows": [
+    {
+     "province": "广东省",
+     "GMV": 14853391.38
+    },
+    {
+     "province": "浙江省",
+     "GMV": 8217476.72
+    },
+    {
+     "province": "江苏省",
+     "GMV": 6677613.76
+    },
+    {
+     "province": "上海市",
+     "GMV": 5443496.64
+    },
+    {
+     "province": "北京市",
+     "GMV": 5123233.82
+    }
+   ],
+   "latency_s": 7.96,
+   "llm_calls": 6,
+   "input_tokens": 8142,
+   "output_tokens": 142,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5
+  },
+  {
+   "id": "e02",
+   "question": "各渠道的GMV分别是多少，从高到低排列。",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "各渠道的GMV分别是多少，从高到低排列。",
+    "GMV",
+    "排列",
+    "渠道"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道",
+    "dim_product.brand.乐高",
+    "dim_product.product_name.乐高玩具限定款",
+    "dim_product.product_name.乐高玩具标准款",
+    "dim_product.product_name.乐高玩具旗舰款"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "fact_traffic",
+    "fact_order",
+    "dim_customer",
+    "dim_shop",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT d.channel_name AS 渠道, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_channel d ON f.channel_id = d.channel_id\nWHERE f.order_status != '已取消'\nGROUP BY d.channel_name\nORDER BY GMV DESC",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.channel_name AS 渠道, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_channel d ON f.channel_id = d.channel_id\nWHERE f.order_status != '已取消'\nGROUP BY d.channel_name\nORDER BY GMV DESC",
+   "pred_rows": [
+    {
+     "渠道": "微信小程序",
+     "GMV": 29543001.29
+    },
+    {
+     "渠道": "自营App",
+     "GMV": 22494162.72
+    },
+    {
+     "渠道": "京东",
+     "GMV": 14631698.16
+    },
+    {
+     "渠道": "天猫",
+     "GMV": 13370972.07
+    },
+    {
+     "渠道": "抖音直播",
+     "GMV": 9291548.0
+    }
+   ],
+   "latency_s": 8.66,
+   "llm_calls": 6,
+   "input_tokens": 8516,
+   "output_tokens": 144,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 6
+  },
+  {
+   "id": "e08",
+   "question": "各会员等级的客单价分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "单价",
+    "会员",
+    "各会员等级的客单价分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "连带率",
+    "下单客户数",
+    "平均评分",
+    "GMV",
+    "订单数",
+    "实付金额",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_customer.member_level.银牌会员",
+    "dim_customer.member_level.金牌会员",
+    "dim_customer.member_level.普通会员",
+    "dim_customer.member_level.钻石会员"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_product",
+    "dim_customer",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_customer"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.customer_id",
+    "fact_order.order_status",
+    "dim_customer.member_level",
+    "dim_customer.customer_id"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(fo.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消'\nGROUP BY dc.member_level",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(fo.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消'\nGROUP BY dc.member_level",
+   "pred_rows": [
+    {
+     "会员等级": "金牌会员",
+     "客单价": 1409.236815
+    },
+    {
+     "会员等级": "银牌会员",
+     "客单价": 1460.30189
+    },
+    {
+     "会员等级": "钻石会员",
+     "客单价": 1441.092816
+    },
+    {
+     "会员等级": "普通会员",
+     "客单价": 1419.970329
+    }
+   ],
+   "latency_s": 8.42,
+   "llm_calls": 6,
+   "input_tokens": 10130,
+   "output_tokens": 158,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 4
+  },
+  {
+   "id": "g03",
+   "question": "新客订单的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "单价",
+    "新客订单的客单价是多少？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "新客订单占比",
+    "客单价",
+    "连带率",
+    "平均评分",
+    "GMV",
+    "实付金额",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_refund",
+    "fact_order",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_coupon",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.order_id",
+    "fact_order.is_new_customer",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT AVG(pay_amount) AS 客单价 FROM fact_order WHERE is_new_customer = 1 AND order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT AVG(pay_amount) AS 客单价 FROM fact_order WHERE is_new_customer = 1 AND order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1463.931552
+    }
+   ],
+   "latency_s": 8.01,
+   "llm_calls": 6,
+   "input_tokens": 12058,
+   "output_tokens": 121,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "g06",
+   "question": "用了优惠券的订单的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "优惠券",
+    "订单",
+    "单价",
+    "用了优惠券的订单的客单价是多少？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "用券订单占比",
+    "优惠率",
+    "平均评分",
+    "连带率",
+    "好评率",
+    "实付金额",
+    "转化率",
+    "净销售额",
+    "新客订单占比",
+    "GMV"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_type.新人券",
+    "dim_coupon.coupon_type.满减券",
+    "dim_coupon.coupon_type.无门槛券",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_coupon.coupon_name.无门槛15元券",
+    "dim_coupon.coupon_name.无门槛30元券"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.order_status",
+    "fact_order.coupon_id"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(pay_amount) / COUNT(*) AS 客单价 FROM fact_order WHERE order_status != '已取消' AND coupon_id IS NOT NULL AND coupon_id != '';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(pay_amount) / COUNT(*) AS 客单价 FROM fact_order WHERE order_status != '已取消' AND coupon_id IS NOT NULL AND coupon_id != '';",
+   "pred_rows": [
+    {
+     "客单价": 1370.314325
+    }
+   ],
+   "latency_s": 9.57,
+   "llm_calls": 6,
+   "input_tokens": 11465,
+   "output_tokens": 139,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "g10",
+   "question": "2025年各城市线级的GMV分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年各城市线级的GMV分别是多少？",
+    "城市",
+    "GMV",
+    "线级"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.二线",
+    "dim_region.city_tier.新一线",
+    "dim_region.city_tier.三线及以下"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "dim_date",
+    "dim_customer",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_region.city_tier",
+    "fact_order.region_id",
+    "fact_order.gross_amount",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  SUM(fo.gross_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025 \n  AND fo.order_status != '已取消'\nGROUP BY dr.city_tier;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  SUM(fo.gross_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025 \n  AND fo.order_status != '已取消'\nGROUP BY dr.city_tier;",
+   "pred_rows": [
+    {
+     "城市线级": "新一线",
+     "GMV": 27571656.29
+    },
+    {
+     "城市线级": "二线",
+     "GMV": 11204884.69
+    },
+    {
+     "城市线级": "一线",
+     "GMV": 12043119.27
+    },
+    {
+     "城市线级": "三线及以下",
+     "GMV": 3006999.16
+    }
+   ],
+   "latency_s": 8.65,
+   "llm_calls": 6,
+   "input_tokens": 8255,
+   "output_tokens": 205,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4
+  },
+  {
+   "id": "h01",
+   "question": "2025年的GMV同比增长了多少？",
+   "tags": [
+    "ratio",
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年的GMV同比增长了多少？",
+    "增长"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic",
+    "fact_refund",
+    "fact_order_item",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  (SUM(CASE WHEN d.year = 2025 THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.year = 2024 THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.year = 2024 THEN f.pay_amount ELSE 0 END), 0) * 100 AS `GMV同比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year IN (2024, 2025)\n  AND f.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  (SUM(CASE WHEN d.year = 2025 THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.year = 2024 THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.year = 2024 THEN f.pay_amount ELSE 0 END), 0) * 100 AS `GMV同比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year IN (2024, 2025)\n  AND f.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV同比增长率": 22.892233
+    }
+   ],
+   "latency_s": 9.92,
+   "llm_calls": 6,
+   "input_tokens": 9357,
+   "output_tokens": 238,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  },
+  {
+   "id": "h02",
+   "question": "本月GMV环比上个月增长了多少？",
+   "tags": [
+    "ratio",
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "本月GMV环比上个月增长了多少？",
+    "增长"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.month",
+    "dim_date.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  (SUM(CASE WHEN d.month = MONTH(CURDATE()) THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END), 0) AS `GMV环比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE f.order_status != '已取消'\n  AND d.date_id >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y%m01')\n  AND d.date_id <= LAST_DAY(CURDATE());",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  (SUM(CASE WHEN d.month = MONTH(CURDATE()) THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END), 0) AS `GMV环比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE f.order_status != '已取消'\n  AND d.date_id >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y%m01')\n  AND d.date_id <= LAST_DAY(CURDATE());",
+   "pred_rows": [
+    {
+     "GMV环比增长率": null
+    }
+   ],
+   "latency_s": 9.6,
+   "llm_calls": 6,
+   "input_tokens": 7104,
+   "output_tokens": 263,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1
+  }
+ ]
+}

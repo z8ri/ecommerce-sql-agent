@@ -25,7 +25,7 @@ from app.repositories.qdrant.metric_qdrant_repository import MetricQdrantReposit
 from app.services.meta_knowledge_service import MetaKnowledgeService
 
 
-async def build(config_path: Path):
+async def build(config_path: Path, reset: bool = False):
     """初始化依赖并执行一次元数据知识构建"""
 
     # 初始化元数据MySQL客户端
@@ -63,7 +63,7 @@ async def build(config_path: Path):
         )
 
         # 真正进入服务层的构建逻辑
-        await meta_knowledge_service.build(config_path)
+        await meta_knowledge_service.build(config_path, reset=reset)
 
     # 结束后关闭客户端连接
     await meta_mysql_client_manager.close()
@@ -76,7 +76,12 @@ if __name__ == "__main__":
     # 解析命令行参数，由外部决定本次构建使用哪份配置文件
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--conf", required=True)
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="构建前先清空已有的元数据、向量和全文索引，修改配置后重建时使用",
+    )
     args = parser.parse_args()
 
     # 将字符串路径转成 Path，再启动异步 build
-    asyncio.run(build(Path(args.conf)))
+    asyncio.run(build(Path(args.conf), reset=args.reset))
