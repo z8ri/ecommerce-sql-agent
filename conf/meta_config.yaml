@@ -338,7 +338,7 @@ tables:
 
   - name: fact_order_item
     role: fact
-    description: 订单明细事实表，一行对应订单中的一个商品，记录商品、数量和成交单价。需要按商品、品牌、品类分析销量或销售额时使用，按订单维度过滤状态需关联订单事实表。
+    description: 订单明细事实表，一行对应订单中的一个商品，记录商品、数量和成交单价。需要按商品、品牌、品类分析销量或销售额时使用本表的 quantity 和 item_amount。统计销量或销售额时必须关联订单事实表并排除 order_status 为 已取消 的订单，已取消订单不算销量也不算销售额。
     columns:
       - name: item_id
         role: primary_key
@@ -438,7 +438,7 @@ tables:
 
 metrics:
   - name: GMV
-    description: 成交总额（Gross Merchandise Value）。口径：订单事实表 gross_amount 之和，必须排除 order_status 为 已取消 的订单；已退款订单仍计入 GMV，退款不从 GMV 中扣除。用户说“销售额”“成交额”而没有特别说明时，默认指 GMV。
+    description: 成交总额（Gross Merchandise Value）。口径：订单事实表 gross_amount 之和，必须排除 order_status 为 已取消 的订单；已退款订单仍计入 GMV，退款不从 GMV 中扣除。用户说“销售额”“成交额”而没有特别说明时，默认指 GMV。粒度说明：gross_amount 是订单级金额，只适用于按订单、日期、地区、渠道、店铺、客户等订单级维度统计。按商品、品牌、品类等商品维度统计销售额时，必须改用订单明细表 fact_order_item 的 item_amount 求和，同样要关联订单表排除已取消订单；不能把订单级 gross_amount 与订单明细连接后求和，一个订单含多个商品时会重复计算。
     relevant_columns:
       - fact_order.gross_amount
       - fact_order.order_status

@@ -13,6 +13,8 @@ EXPLAIN 只能发现语法错误。评测显示，首次生成就通过 EXPLAIN 
 就把结果发给前端并结束。
 """
 
+import re
+
 import yaml
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
@@ -26,6 +28,29 @@ from app.core.log import logger
 from app.prompt.prompt_loader import load_prompt
 
 PREVIEW_ROWS = 10
+
+# 复核模型有时判了“需要修正”，理由正文却在说“没有问题”，这类自相矛盾的判定按通过处理
+NO_PROBLEM = re.compile(
+    r"(无|没有|未发现)(任何|实质性|明显|重大)?(错误|问题|疑点)|计算正确|完全符合|符合(口径|要求)"
+)
+
+
+def drop_contradictions(issues: list[str]) -> list[str]:
+    return [i for i in issues if not NO_PROBLEM.search(i)]
+
+
+def strip_misleading_examples(table_infos: list[dict]) -> list[dict]:
+    """去掉数值型字段的示例值：复核模型会把 date_id 的几个抽样值误当成数据的时间范围"""
+    cleaned = []
+    for table in table_infos:
+        columns = []
+        for col in table["columns"]:
+            col = dict(col)
+            if not str(col.get("type", "")).lower().startswith(("varchar", "char")):
+                col["examples"] = []
+            columns.append(col)
+        cleaned.append({**table, "columns": columns})
+    return cleaned
 
 
 def dump(data) -> str:
@@ -76,7 +101,6 @@ async def verify_result(state: DataAgentState, runtime: Runtime[DataAgentContext
                     "query",
                     "table_infos",
                     "metric_infos",
-                    "date_info",
                     "sql",
                     "result_summary",
                 ],
@@ -85,15 +109,18 @@ async def verify_result(state: DataAgentState, runtime: Runtime[DataAgentContext
             verdict = await chain.ainvoke(
                 {
                     "query": state["query"],
-                    "table_infos": dump(state["table_infos"]),
+                    "table_infos": dump(
+                        strip_misleading_examples(state["table_infos"])
+                    ),
                     "metric_infos": dump(state["metric_infos"]),
-                    "date_info": dump(state["date_info"]),
                     "sql": state["sql"],
                     "result_summary": summarize(result),
                 }
             )
             if verdict.get("verdict") == "fix":
-                issues = [str(i) for i in verdict.get("issues", [])]
+                issues = drop_contradictions(
+                    [str(i) for i in verdict.get("issues", [])]
+                )
 
         writer({"type": "progress", "step": step, "status": "success"})
         if issues and can_repair:
