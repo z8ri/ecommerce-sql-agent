@@ -101,6 +101,8 @@ class AgentConfig:
     # 数仓数据的截止日期（yyyy-MM-dd）。“今天”“上个月”“最近 30 天”等相对时间以它为基准，
     # 而不是服务器当前时间；为空时才回退到当前日期
     as_of_date: str = ""
+    # 表过滤之后，把选中指标依赖的字段补回上下文（见 pin_metric_columns 节点）
+    pin_metric_columns: bool = True
 
 
 @dataclass

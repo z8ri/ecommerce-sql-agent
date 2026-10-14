@@ -43,6 +43,18 @@ from eval.dataset import Question, load_questions
 
 RUNS_DIR = Path(__file__).parent / "runs"
 QUESTION_TIMEOUT = 240
+MAX_ATTEMPTS = 3
+# 这些错误来自基础设施（连接超时、限流），不代表 Agent 答错；遇到时自动重试
+TRANSIENT_ERRORS = (
+    "ConnectionTimeout",
+    "ResponseHandlingException",
+    "TimeoutError",
+    "ReadTimeout",
+    "ConnectError",
+    "RateLimit",
+    "APIConnectionError",
+    "APITimeoutError",
+)
 
 
 class LLMStats(BaseCallbackHandler):
@@ -163,6 +175,21 @@ async def run_question(q: Question, gold: tuple[list, list]) -> dict:
     return record
 
 
+async def run_with_retry(q: Question, gold: tuple[list, list]) -> dict:
+    """基础设施类的瞬时错误重试；重试后仍失败的标记为 infra_error，报告里单独统计"""
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        rec = await run_question(q, gold)
+        rec["attempts"] = attempt
+        transient = bool(rec["error"]) and any(
+            k in rec["error"] for k in TRANSIENT_ERRORS
+        )
+        if transient and attempt < MAX_ATTEMPTS:
+            await asyncio.sleep(3 * attempt)
+            continue
+        rec["infra_error"] = transient
+        return rec
+
+
 def capture(record: dict, node: str, upd: dict):
     """把节点输出里评测关心的部分记录下来"""
     if node == "extract_keywords":
@@ -174,6 +201,12 @@ def capture(record: dict, node: str, upd: dict):
     elif node == "merge_retrieved_info":
         record["merged_tables"] = [t["name"] for t in upd["table_infos"]]
     elif node == "filter_table":
+        record["final_tables"] = [t["name"] for t in upd["table_infos"]]
+        record["final_columns"] = [
+            f"{t['name']}.{c['name']}" for t in upd["table_infos"] for c in t["columns"]
+        ]
+    elif node == "pin_metric_columns":
+        # 补回指标依赖字段之后的表上下文，才是 SQL 生成真正看到的
         record["final_tables"] = [t["name"] for t in upd["table_infos"]]
         record["final_columns"] = [
             f"{t['name']}.{c['name']}" for t in upd["table_infos"] for c in t["columns"]
@@ -210,7 +243,7 @@ async def main(args):
         async def guarded(q):
             nonlocal done
             async with sem:
-                rec = await run_question(q, gold[q.id])
+                rec = await run_with_retry(q, gold[q.id])
             done += 1
             mark = "PASS" if rec["ex"] else "FAIL"
             print(
@@ -242,6 +275,11 @@ async def main(args):
         ),
         encoding="utf-8",
     )
+    infra = sum(r["infra_error"] for r in records)
+    if infra:
+        print(
+            f"注意：{infra} 题因基础设施错误未能得到有效结果（已重试 {MAX_ATTEMPTS} 次）"
+        )
     passed = sum(r["ex"] for r in records)
     print(f"\nEX = {passed}/{len(records)} = {passed / len(records):.1%}  -> {out}")
 

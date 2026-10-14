@@ -48,3 +48,5 @@ llm:
 agent:
   # 演示数仓的数据截止日期，相对时间（今天/上个月/最近30天）以此为基准；留空则使用当前日期
   as_of_date: "2025-12-31"
+  # 功能开关，用环境变量覆盖可以在评测里做消融对比，例如 AGENT_PIN_METRIC_COLUMNS=false
+  pin_metric_columns: ${oc.decode:${oc.env:AGENT_PIN_METRIC_COLUMNS,true}}

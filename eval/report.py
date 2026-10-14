@@ -5,7 +5,8 @@
 
 用法：
     uv run python -m eval.report baseline
-    uv run python -m eval.report baseline guarded      # 并排对比两次运行
+    uv run python -m eval.report baseline baseline_r2  # 并排对比几次具体运行
+    uv run python -m eval.report --groups baseline pin # 按组对比（每组自动收集 <tag>_r1..3），推荐
 """
 
 import json
@@ -107,6 +108,8 @@ def summarize(records: list[dict], questions: list[Question]) -> dict:
         "n": n,
         "ex": mean(ex),
         "executed": mean([r["pred_rows"] is not None for r in records]),
+        "infra_errors": sum(1 for r in records if r.get("infra_error")),
+        "retried": sum(1 for r in records if r.get("attempts", 1) > 1),
         "latency_p50": statistics.median(r["latency_s"] for r in records),
         "latency_p90": sorted(r["latency_s"] for r in records)[int(n * 0.9) - 1],
         "llm_calls": mean([r["llm_calls"] for r in records]),
@@ -255,7 +258,130 @@ def render_compare(names: list[str], summaries: list[dict]) -> str:
     return "\n".join(L)
 
 
+def resolve_group(tag: str) -> list[str]:
+    """tag=baseline -> baseline, baseline_r2, baseline_r3；tag=pin -> pin_r1, pin_r2, pin_r3"""
+    files = list(RUNS_DIR.glob(f"{tag}.json")) + list(
+        RUNS_DIR.glob(f"{tag}_r[0-9]*.json")
+    )
+    return sorted(f.stem for f in files)
+
+
+def group_stats(tag: str, questions: list[Question]) -> dict:
+    names = resolve_group(tag)
+    if not names:
+        sys.exit(f"找不到运行记录：{tag}")
+    runs = [load_run(n) for n in names]
+    sums = [summarize(r, questions) for r in runs]
+    passes = defaultdict(int)
+    for run in runs:
+        for r in run:
+            passes[r["id"]] += int(r["ex"])
+    exs = [x["ex"] for x in sums]
+
+    def avg(key):
+        vals = [x[key] for x in sums if x[key] is not None]
+        return mean(vals)
+
+    tags = defaultdict(list)
+    for x in sums:
+        for t, (v, _) in x["by_tag"].items():
+            tags[t].append(v)
+    diffs = defaultdict(list)
+    for x in sums:
+        for t, (v, _) in x["by_difficulty"].items():
+            diffs[t].append(v)
+    return {
+        "tag": tag,
+        "n": len(runs),
+        "ex_mean": statistics.mean(exs),
+        "ex_sd": statistics.stdev(exs) if len(exs) > 1 else 0.0,
+        "ex_min": min(exs),
+        "ex_max": max(exs),
+        "silent_wrong": avg("silent_wrong"),
+        "infra_errors": avg("infra_errors"),
+        "retried": avg("retried"),
+        "latency_p50": avg("latency_p50"),
+        "llm_calls": avg("llm_calls"),
+        "tokens": avg("tokens"),
+        "by_tag": {t: statistics.mean(v) for t, v in tags.items()},
+        "by_difficulty": {t: statistics.mean(v) for t, v in diffs.items()},
+        "passes": dict(passes),
+    }
+
+
+def render_groups(tags: list[str], questions: list[Question]) -> str:
+    gs = [group_stats(t, questions) for t in tags]
+    first, last = gs[0], gs[-1]
+    head = ["指标"] + [f"{g['tag']} (n={g['n']})" for g in gs]
+    if len(gs) > 1:
+        head.append(f"Δ ({last['tag']} − {first['tag']})")
+    L = ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
+
+    def row(label, fn, delta=None):
+        cells = [label] + [fn(g) for g in gs]
+        if len(gs) > 1:
+            cells.append(delta(first, last) if delta else "")
+        L.append("| " + " | ".join(cells) + " |")
+
+    row(
+        "**EX 均值 ± 标准差**",
+        lambda g: f"**{pct(g['ex_mean'])}** ± {g['ex_sd'] * 100:.1f}",
+        lambda a, b: f"**{(b['ex_mean'] - a['ex_mean']) * 100:+.1f} 个百分点**",
+    )
+    row("EX 范围", lambda g: f"{pct(g['ex_min'])} ~ {pct(g['ex_max'])}")
+    row(
+        "校验抓不到的语义错误",
+        lambda g: pct(g["silent_wrong"]) if g["silent_wrong"] is not None else "-",
+    )
+    row(
+        "设施错误题数 / 重试题数（均值）",
+        lambda g: f"{g['infra_errors']:.1f} / {g['retried']:.1f}",
+    )
+    row("延迟 P50", lambda g: f"{g['latency_p50']:.1f}s")
+    row("平均 LLM 调用 / 题", lambda g: f"{g['llm_calls']:.1f}")
+    row("平均 token / 题", lambda g: f"{g['tokens']:.0f}")
+    for d in ("easy", "medium", "hard"):
+        row(
+            f"EX · {d}",
+            lambda g, d=d: (
+                pct(g["by_difficulty"][d]) if d in g["by_difficulty"] else "-"
+            ),
+            lambda a, b, d=d: (
+                f"{(b['by_difficulty'][d] - a['by_difficulty'][d]) * 100:+.1f}"
+            ),
+        )
+    all_tags = sorted({t for g in gs for t in g["by_tag"]})
+    for t in all_tags:
+        row(
+            f"EX · {t}",
+            lambda g, t=t: pct(g["by_tag"][t]) if t in g["by_tag"] else "-",
+            lambda a, b, t=t: (
+                f"{(b['by_tag'].get(t, 0) - a['by_tag'].get(t, 0)) * 100:+.1f}"
+            ),
+        )
+
+    out = ["\n".join(L)]
+    if len(gs) > 1:
+        # 逐题变化：用通过率（通过次数 / 运行次数）比较，过滤掉单次运行的随机波动
+        def rate(g, qid):
+            return g["passes"].get(qid, 0) / g["n"]
+
+        fixed = [q.id for q in questions if rate(last, q.id) - rate(first, q.id) >= 0.6]
+        broke = [q.id for q in questions if rate(first, q.id) - rate(last, q.id) >= 0.6]
+        still = [q.id for q in questions if rate(last, q.id) == 0]
+        out += [
+            "",
+            f"- 明显变好的题（通过率提升 ≥ 60%）：{len(fixed)} 题 — {', '.join(fixed) or '-'}",
+            f"- 明显变差的题（通过率下降 ≥ 60%）：{len(broke)} 题 — {', '.join(broke) or '-'}",
+            f"- {last['tag']} 中仍然稳定答错：{len(still)} 题 — {', '.join(still) or '-'}",
+        ]
+    return "\n".join(out)
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--groups"]:
+        print(render_groups(sys.argv[2:], load_questions()))
+        sys.exit(0)
     names = sys.argv[1:]
     if not names:
         sys.exit(__doc__)
