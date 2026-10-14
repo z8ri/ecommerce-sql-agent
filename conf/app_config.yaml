@@ -29,9 +29,11 @@ qdrant:
   embedding_size: 1024
 
 embedding:
-  host: localhost
-  port: 8081
-  model: BAAI/bge-large-zh-v1.5
+  # 云端 Embedding（百炼）；改回本地 TEI 时设置 provider: tei，并使用 host/port/model: BAAI/bge-large-zh-v1.5
+  provider: openai
+  model: text-embedding-v4
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key: ${oc.env:LLM_API_KEY}
 
 es:
   host: localhost
@@ -39,6 +41,10 @@ es:
   index_name: data_agent
 
 llm:
-  model_name: Pro/zai-org/GLM-5.1
+  model_name: qwen-plus
   api_key: ${oc.env:LLM_API_KEY}
-  base_url: https://api.siliconflow.cn/v1
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+
+agent:
+  # 演示数仓的数据截止日期，相对时间（今天/上个月/最近30天）以此为基准；留空则使用当前日期
+  as_of_date: "2025-12-31"

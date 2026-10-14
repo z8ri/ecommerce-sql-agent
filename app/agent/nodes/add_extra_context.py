@@ -11,6 +11,7 @@ from langgraph.runtime import Runtime
 
 from app.agent.context import DataAgentContext
 from app.agent.state import DataAgentState, DateInfoState, DBInfoState
+from app.conf.app_config import app_config
 from app.core.log import logger
 
 
@@ -23,8 +24,10 @@ async def add_extra_context(state: DataAgentState, runtime: Runtime[DataAgentCon
     try:
         dw_mysql_repository = runtime.context["dw_mysql_repository"]
 
-        # 当前日期信息会帮助模型处理“今天 本月 本季度 最近 N 天”等相对时间表达
-        today = date.today()
+        # 日期信息会帮助模型处理“今天 本月 本季度 最近 N 天”等相对时间表达
+        # 以数仓数据截止日期作为“今天”，避免数据停在过去时相对时间问到空结果
+        as_of_date = app_config.agent.as_of_date
+        today = date.fromisoformat(as_of_date) if as_of_date else date.today()
         date_str = today.strftime("%Y-%m-%d")
         weekday = today.strftime("%A")
         quarter = f"Q{(today.month - 1) // 3 + 1}"

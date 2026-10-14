@@ -8,7 +8,7 @@
 
 import json
 
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_core.embeddings import Embeddings
 
 from app.agent.context import DataAgentContext
 from app.agent.graph import graph
@@ -26,7 +26,7 @@ class QueryService:
     def __init__(
         self,
         meta_mysql_repository: MetaMySQLRepository,
-        embedding_client: HuggingFaceEndpointEmbeddings,
+        embedding_client: Embeddings,
         dw_mysql_repository: DWMySQLRepository,
         column_qdrant_repository: ColumnQdrantRepository,
         metric_qdrant_repository: MetricQdrantRepository,

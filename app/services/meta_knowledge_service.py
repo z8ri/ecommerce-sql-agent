@@ -12,7 +12,7 @@ import uuid
 from dataclasses import asdict
 from pathlib import Path
 
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_core.embeddings import Embeddings
 from omegaconf import OmegaConf
 
 from app.conf.meta_config import MetaConfig
@@ -37,7 +37,7 @@ class MetaKnowledgeService:
         meta_mysql_repository: MetaMySQLRepository,
         dw_mysql_repository: DWMySQLRepository,
         column_qdrant_repository: ColumnQdrantRepository,
-        embedding_client: HuggingFaceEndpointEmbeddings,
+        embedding_client: Embeddings,
         value_es_repository: ValueESRepository,
         metric_qdrant_repository: MetricQdrantRepository,
     ):
@@ -48,7 +48,7 @@ class MetaKnowledgeService:
         # 字段向量集合的创建和写入统一交给 Qdrant Repository
         self.column_qdrant_repository: ColumnQdrantRepository = column_qdrant_repository
         # 向量化动作放在 Service 层
-        self.embedding_client: HuggingFaceEndpointEmbeddings = embedding_client
+        self.embedding_client: Embeddings = embedding_client
         # 字段值全文索引的写入统一交给 ES Repository
         self.value_es_repository: ValueESRepository = value_es_repository
         # 指标向量集合和字段向量集合分开管理，便于后续按对象类型独立召回

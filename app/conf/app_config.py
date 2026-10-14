@@ -6,7 +6,7 @@
 就可以按属性方式读取日志 MySQL Qdrant Embedding Elasticsearch 和 LLM 配置
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -62,11 +62,18 @@ class QdrantConfig:
 
 @dataclass
 class EmbeddingConfig:
-    """Embedding 服务配置"""
+    """Embedding 服务配置
 
-    host: str
-    port: int
+    provider=tei 使用本地 TEI 容器（host/port）；
+    provider=openai 使用 OpenAI 兼容的云端接口（base_url/api_key），如阿里云百炼
+    """
+
     model: str
+    provider: str = "tei"
+    host: str = "localhost"
+    port: int = 8081
+    base_url: str = ""
+    api_key: str = ""
 
 
 @dataclass
@@ -88,6 +95,15 @@ class LLMConfig:
 
 
 @dataclass
+class AgentConfig:
+    """问数 Agent 行为配置"""
+
+    # 数仓数据的截止日期（yyyy-MM-dd）。“今天”“上个月”“最近 30 天”等相对时间以它为基准，
+    # 而不是服务器当前时间；为空时才回退到当前日期
+    as_of_date: str = ""
+
+
+@dataclass
 class AppConfig:
     """项目级总配置入口"""
 
@@ -98,6 +114,7 @@ class AppConfig:
     embedding: EmbeddingConfig
     es: ESConfig
     llm: LLMConfig
+    agent: AgentConfig = field(default_factory=AgentConfig)
 
 
 # 从当前文件位置回到项目根目录，再定位到 conf/app_config.yaml

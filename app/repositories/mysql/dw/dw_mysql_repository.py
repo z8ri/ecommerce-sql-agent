@@ -7,8 +7,20 @@
 SQL 生成闭环中的数据库环境读取 SQL 校验和最终查询执行也集中放在这里
 """
 
+from datetime import date, datetime
+from decimal import Decimal
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
+
+
+def to_jsonable(value):
+    """把数据库返回的 Decimal / 日期等类型转成能直接序列化成 JSON 的值"""
+    if isinstance(value, Decimal):
+        return float(value)
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    return value
 
 
 class DWMySQLRepository:
@@ -30,7 +42,8 @@ class DWMySQLRepository:
         """抽样查询字段示例值，供元数据入库和后续检索链路复用"""
         sql = f"select distinct {column_name} from {table_name} limit {limit}"
         result = await self.session.execute(text(sql))
-        return [row[0] for row in result.fetchall()]
+        # NULL 不是有意义的示例值，也不应该进入全文索引
+        return [to_jsonable(row[0]) for row in result.fetchall() if row[0] is not None]
 
     async def get_db_info(self):
         """读取当前数仓数据库的方言和版本，供 SQL 生成提示词使用"""
@@ -51,4 +64,7 @@ class DWMySQLRepository:
     async def run(self, sql: str) -> list[dict]:
         """执行最终 SQL，并把 SQLAlchemy 行对象转换成前端更易消费的字典列表"""
         result = await self.session.execute(text(sql))
-        return [dict(row) for row in result.mappings().fetchall()]
+        return [
+            {k: to_jsonable(v) for k, v in row.items()}
+            for row in result.mappings().fetchall()
+        ]
