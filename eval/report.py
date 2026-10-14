@@ -10,6 +10,7 @@
 """
 
 import json
+import os
 import statistics
 import sys
 from collections import defaultdict
@@ -17,7 +18,8 @@ from pathlib import Path
 
 from eval.dataset import Question, load_questions
 
-RUNS_DIR = Path(__file__).parent / "runs"
+# 评测快照里运行时，用 EVAL_RUNS_DIR 把结果写回主工作区
+RUNS_DIR = Path(os.environ.get("EVAL_RUNS_DIR", Path(__file__).parent / "runs"))
 
 
 def load_run(name: str) -> list[dict]:
@@ -121,6 +123,10 @@ def summarize(records: list[dict], questions: list[Question]) -> dict:
     corrected = [r for r in records if r["corrected_sql"]]
     summary["first_pass_valid"] = len(first_ok) / n
     summary["corrected_n"] = len(corrected)
+    summary["repairs_avg"] = mean([r.get("repairs", 0) for r in records])
+    flagged = [r for r in records if r.get("verify_issues")]
+    summary["verify_flagged_n"] = len(flagged)
+    summary["verify_flagged_ex"] = mean([r["ex"] for r in flagged]) if flagged else None
     summary["corrected_ex"] = mean([r["ex"] for r in corrected]) if corrected else None
     # 一次生成就通过语法校验的题里，仍然答错的比例：说明 EXPLAIN 校验抓不到语义错误
     summary["silent_wrong"] = (
@@ -160,6 +166,8 @@ def render(name: str, s: dict, records: list[dict], questions: list[Question]) -
         f"| 首次生成即通过 EXPLAIN 校验 | {pct(s['first_pass_valid'])} |",
         f"| 其中答案仍然错误（校验抓不到的语义错误） | {pct(s['silent_wrong']) if s['silent_wrong'] is not None else '-'} |",
         f"| 触发修正的题数 / 修正后答对率 | {s['corrected_n']} / {pct(s['corrected_ex']) if s['corrected_ex'] is not None else '-'} |",
+        f"| 结果复核发现问题的题数 / 修正后答对率 | {s['verify_flagged_n']} / {pct(s['verify_flagged_ex']) if s['verify_flagged_ex'] is not None else '-'} |",
+        f"| 平均修正次数 / 题 | {s['repairs_avg']:.2f} |",
         f"| 延迟 P50 / P90 | {s['latency_p50']:.1f}s / {s['latency_p90']:.1f}s |",
         f"| 平均大模型调用次数 / 题 | {s['llm_calls']:.1f} |",
         f"| 平均 token / 题 | {s['tokens']:.0f} |",

@@ -24,8 +24,10 @@ from app.agent.nodes.pin_metric_columns import pin_metric_columns
 from app.agent.nodes.recall_column import recall_column
 from app.agent.nodes.recall_metric import recall_metric
 from app.agent.nodes.recall_value import recall_value
+from app.agent.nodes.repair_sql import repair_sql
 from app.agent.nodes.run_sql import run_sql
 from app.agent.nodes.validate_sql import validate_sql
+from app.agent.nodes.verify_result import verify_result
 from app.agent.state import DataAgentState
 from app.clients.embedding_client_manager import embedding_client_manager
 from app.clients.es_client_manager import es_client_manager
@@ -34,6 +36,7 @@ from app.clients.mysql_client_manager import (
     meta_mysql_client_manager,
 )
 from app.clients.qdrant_client_manager import qdrant_client_manager
+from app.conf.app_config import app_config
 from app.repositories.es.value_es_repository import ValueESRepository
 from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
 from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRepository
@@ -83,14 +86,92 @@ graph_builder.add_edge("pin_metric_columns", "add_extra_context")
 graph_builder.add_edge("add_extra_context", "generate_sql")
 graph_builder.add_edge("generate_sql", "validate_sql")
 
-# SQL 校验通过就直接执行，校验失败则先进入修正节点
-graph_builder.add_conditional_edges(
-    source="validate_sql",
-    path=lambda state: "run_sql" if state["error"] is None else "correct_sql",
-    path_map={"run_sql": "run_sql", "correct_sql": "correct_sql"},
-)
-graph_builder.add_edge("correct_sql", "run_sql")
-graph_builder.add_edge("run_sql", END)
+
+async def refuse(state: DataAgentState, runtime):
+    """安全检查未通过：告知前端并结束，不修正、不执行"""
+    runtime.stream_writer(
+        {"type": "error", "message": f"请求被安全策略拒绝：{state['error']}"}
+    )
+
+
+graph_builder.add_node("refuse", refuse)
+graph_builder.add_edge("refuse", END)
+
+if not app_config.agent.self_correct:
+    # 原始流程：校验失败修正一次，修正后直接执行（不再校验，也不检查结果）
+    graph_builder.add_conditional_edges(
+        source="validate_sql",
+        path=lambda state: (
+            "refuse"
+            if state.get("blocked")
+            else "run_sql"
+            if state["error"] is None
+            else "correct_sql"
+        ),
+        path_map={
+            "run_sql": "run_sql",
+            "correct_sql": "correct_sql",
+            "refuse": "refuse",
+        },
+    )
+    graph_builder.add_edge("correct_sql", "run_sql")
+    graph_builder.add_edge("run_sql", END)
+else:
+    # 自纠错循环：
+    #   generate -> validate -> run -> verify -> END
+    # 校验失败 / 执行出错 / 复核不通过时进入 repair，repair 之后一律重新校验；
+    # 修正次数有上限，用完仍失败就报错，不会无限循环
+    def has_budget(state) -> bool:
+        return state.get("repairs", 0) < app_config.agent.max_repairs
+
+    async def fail(state: DataAgentState):
+        raise RuntimeError(f"多次修正后仍无法得到可执行的 SQL：{state['error']}")
+
+    graph_builder.add_node("repair_sql", repair_sql)
+    graph_builder.add_node("verify_result", verify_result)
+    graph_builder.add_node("fail", fail)
+
+    def after_validate(state) -> str:
+        if state.get("blocked"):
+            return "refuse"
+        if state["error"] is None:
+            return "run_sql"
+        return "repair_sql" if has_budget(state) else "fail"
+
+    def after_run(state) -> str:
+        if state.get("blocked"):
+            return "refuse"
+        if state.get("error") is None:
+            return "verify_result"
+        return "repair_sql" if has_budget(state) else "fail"
+
+    def after_verify(state) -> str:
+        return END if state.get("error") is None else "repair_sql"
+
+    graph_builder.add_conditional_edges(
+        "validate_sql",
+        after_validate,
+        {
+            "run_sql": "run_sql",
+            "repair_sql": "repair_sql",
+            "fail": "fail",
+            "refuse": "refuse",
+        },
+    )
+    graph_builder.add_conditional_edges(
+        "run_sql",
+        after_run,
+        {
+            "verify_result": "verify_result",
+            "repair_sql": "repair_sql",
+            "fail": "fail",
+            "refuse": "refuse",
+        },
+    )
+    graph_builder.add_conditional_edges(
+        "verify_result", after_verify, {END: END, "repair_sql": "repair_sql"}
+    )
+    graph_builder.add_edge("repair_sql", "validate_sql")
 
 # 编译后的 graph 是对外使用的 Agent 执行入口
 graph = graph_builder.compile()

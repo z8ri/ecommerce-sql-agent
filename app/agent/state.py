@@ -51,6 +51,8 @@ class DateInfoState(TypedDict):
     date: str
     weekday: str
     quarter: str
+    # 问题里的相对时间表达经程序确定的含义，见 time_resolver
+    resolved: list[dict]
 
 
 class DBInfoState(TypedDict):
@@ -76,4 +78,11 @@ class DataAgentState(TypedDict):
 
     sql: str  # 生成或校正后的SQL
 
-    error: str  # 校验SQL时出现的错误信息
+    error: str  # 校验SQL时出现的错误信息；自纠错模式下也承载执行错误和结果复核意见
+
+    # 以下字段只在自纠错循环模式（agent.self_correct）下使用
+    result: list[dict]  # 最近一次 SQL 的执行结果
+    repairs: int  # 已经修正的次数
+    history: list[dict]  # 此前失败的尝试（SQL 和反馈），避免重复同样的错误
+    verified: bool  # 最终结果是否通过了语义复核
+    blocked: bool  # SQL 安全检查未通过，请求被拒绝

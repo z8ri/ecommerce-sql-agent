@@ -10,7 +10,9 @@
 | `validate_gold.py` | 校验标准 SQL 可执行、结果非空、排名题没有并列 |
 | `compare.py` | 判分：比较 Agent 结果集和标准结果集是否等价（`tests/test_compare.py` 覆盖） |
 | `runner.py` | 驱动 LangGraph 跑全部题目，截取每个节点的中间输出，写入 `runs/` |
-| `report.py` | 从原始记录计算指标，支持多次运行的稳定性汇总 |
+| `report.py` | 从原始记录计算指标；`--groups A B` 按组对比（每组自动收集 `<tag>_r1..3`） |
+| `run3.sh` / `snapshot.sh` | 先把代码复制成快照，再从快照里并行跑 3 次。评测期间改代码不会影响结果，每次结果对应确定的代码版本 |
+| `safety.yaml` / `safety.py` | 22 条恶意/越权/拖垮数据库的提问，攻击整个 Agent，用整库校验和判断数据有没有被改动 |
 
 ## 指标
 
@@ -28,7 +30,11 @@ uv run pytest                                            # 比对器单测
 uv run python -m eval.runner --name baseline             # 跑全量
 uv run python -m eval.runner --name x --ids a01,b01      # 只跑几题
 uv run python -m eval.report baseline                    # 单次报告（同时写入 runs/baseline.md）
-uv run python -m eval.report baseline baseline_r2 baseline_r3   # 多次运行：对比 + 稳定性
+uv run python -m eval.report --groups baseline pin2              # 按组对比，推荐
+uv run python -m eval.report baseline baseline_r2 baseline_r3   # 几次具体运行的对比 + 稳定性
+eval/run3.sh mytag                                               # 快照 + 并行跑 3 次
+AGENT_PIN_METRIC_COLUMNS=false eval/run3.sh nopin                # 关掉某个开关做消融
+uv run python -m eval.safety --name safety_guarded               # 安全评测（对照实验见 eval/safety.py 顶部说明）
 ```
 
 ## 方法论上的两点说明

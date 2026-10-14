@@ -72,6 +72,11 @@ class MetaMySQLRepository:
         else:
             return None
 
+    async def list_table_names(self) -> list[str]:
+        """全部已登记的表名，作为 SQL 安全检查的表白名单"""
+        result = await self.session.scalars(select(TableInfoMySQL.name))
+        return list(result.all())
+
     async def get_table_info_by_id(self, id: str) -> TableInfo | None:
         """按表 id 查询表元数据，最终组装成提示词里的表结构信息"""
 

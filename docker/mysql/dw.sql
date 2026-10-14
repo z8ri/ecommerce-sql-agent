@@ -2,6 +2,12 @@ SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS dw DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 GRANT ALL PRIVILEGES ON dw.* TO 'didilili'@'%';
+
+-- 问数 Agent 运行时使用的只读账号：只有 SELECT 权限，即使上层的 SQL 检查被绕过，
+-- 数据库本身也不会执行任何写操作
+CREATE USER IF NOT EXISTS 'dw_ro'@'%' IDENTIFIED BY 'dw_ro_pass';
+GRANT SELECT ON dw.* TO 'dw_ro'@'%';
+
 USE dw;
 
 -- 演示数仓：多渠道电商（2024-01-01 ~ 2025-12-31）

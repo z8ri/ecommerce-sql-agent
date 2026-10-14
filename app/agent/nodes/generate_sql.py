@@ -13,6 +13,8 @@ from langgraph.runtime import Runtime
 from app.agent.context import DataAgentContext
 from app.agent.llm import llm
 from app.agent.state import DataAgentState
+from app.agent.time_resolver import TIME_RULES
+from app.conf.app_config import app_config
 from app.core.log import logger
 from app.prompt.prompt_loader import load_prompt
 
@@ -40,6 +42,7 @@ async def generate_sql(state: DataAgentState, runtime: Runtime[DataAgentContext]
                 "date_info",
                 "db_info",
                 "query",
+                "time_rules",
             ],
         )
         # SQL 生成节点只需要纯文本 SQL，不能要求模型输出 JSON 或 Markdown 代码块
@@ -58,6 +61,7 @@ async def generate_sql(state: DataAgentState, runtime: Runtime[DataAgentContext]
                 "date_info": yaml.dump(date_info, allow_unicode=True, sort_keys=False),
                 "db_info": yaml.dump(db_info, allow_unicode=True, sort_keys=False),
                 "query": query,
+                "time_rules": TIME_RULES if app_config.agent.resolve_time else "",
             }
         )
         logger.info(f"生成的SQL：{result}")

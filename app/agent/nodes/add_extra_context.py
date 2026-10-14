@@ -11,6 +11,7 @@ from langgraph.runtime import Runtime
 
 from app.agent.context import DataAgentContext
 from app.agent.state import DataAgentState, DateInfoState, DBInfoState
+from app.agent.time_resolver import resolve_time_expressions
 from app.conf.app_config import app_config
 from app.core.log import logger
 
@@ -31,7 +32,15 @@ async def add_extra_context(state: DataAgentState, runtime: Runtime[DataAgentCon
         date_str = today.strftime("%Y-%m-%d")
         weekday = today.strftime("%A")
         quarter = f"Q{(today.month - 1) // 3 + 1}"
-        date_info = DateInfoState(date=date_str, weekday=weekday, quarter=quarter)
+        # 相对时间表达的含义由代码确定，不让大模型自己推算
+        resolved = (
+            resolve_time_expressions(state["query"], today)
+            if app_config.agent.resolve_time
+            else []
+        )
+        date_info = DateInfoState(
+            date=date_str, weekday=weekday, quarter=quarter, resolved=resolved
+        )
 
         # 数据库方言和版本会影响函数名 日期运算 limit 语法等 SQL 细节
         db = await dw_mysql_repository.get_db_info()

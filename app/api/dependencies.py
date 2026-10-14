@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.clients.embedding_client_manager import embedding_client_manager
 from app.clients.es_client_manager import es_client_manager
 from app.clients.mysql_client_manager import (
-    dw_mysql_client_manager,
+    dw_readonly_mysql_client_manager,
     meta_mysql_client_manager,
 )
 from app.clients.qdrant_client_manager import qdrant_client_manager
@@ -52,7 +52,8 @@ async def get_embedding_client() -> Embeddings:
 async def get_dw_session():
     """创建一次请求内使用的数仓 Session"""
 
-    async with dw_mysql_client_manager.session_factory() as dw_session:
+    # 运行时只用只读账号执行 SQL
+    async with dw_readonly_mysql_client_manager.session_factory() as dw_session:
         yield dw_session
 
 

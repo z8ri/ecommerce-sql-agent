@@ -16,6 +16,7 @@
 import argparse
 import asyncio
 import json
+import os
 import time
 from datetime import datetime
 from pathlib import Path
@@ -30,6 +31,7 @@ from app.clients.embedding_client_manager import embedding_client_manager
 from app.clients.es_client_manager import es_client_manager
 from app.clients.mysql_client_manager import (
     dw_mysql_client_manager,
+    dw_readonly_mysql_client_manager,
     meta_mysql_client_manager,
 )
 from app.clients.qdrant_client_manager import qdrant_client_manager
@@ -41,7 +43,8 @@ from app.repositories.qdrant.metric_qdrant_repository import MetricQdrantReposit
 from eval.compare import compare
 from eval.dataset import Question, load_questions
 
-RUNS_DIR = Path(__file__).parent / "runs"
+# 评测快照里运行时，用 EVAL_RUNS_DIR 把结果写回主工作区
+RUNS_DIR = Path(os.environ.get("EVAL_RUNS_DIR", Path(__file__).parent / "runs"))
 QUESTION_TIMEOUT = 240
 MAX_ATTEMPTS = 3
 # 这些错误来自基础设施（连接超时、限流），不代表 Agent 答错；遇到时自动重试
@@ -89,12 +92,15 @@ async def execute_gold(questions: list[Question]) -> dict[str, tuple[list, list]
     return gold
 
 
-async def run_question(q: Question, gold: tuple[list, list]) -> dict:
+async def run_agent(
+    qid: str, question: str, tags: list[str] | None = None, difficulty: str = ""
+) -> dict:
+    """驱动 Agent 回答一个问题，返回包含各节点中间输出的原始记录（不判分）"""
     record = {
-        "id": q.id,
-        "question": q.question,
-        "tags": q.tags,
-        "difficulty": q.difficulty,
+        "id": qid,
+        "question": question,
+        "tags": tags or [],
+        "difficulty": difficulty,
         "error": None,
         "keywords": [],
         "retrieved_metrics": [],
@@ -105,6 +111,13 @@ async def run_question(q: Question, gold: tuple[list, list]) -> dict:
         "selected_metrics": [],
         "first_sql": None,
         "validate_error": None,
+        "validated": False,
+        "repairs": 0,
+        "verify_issues": [],
+        "exec_errors": [],
+        "verified": None,
+        "blocked": False,
+        "refusal": None,
         "corrected_sql": None,
         "final_sql": None,
         "pred_rows": None,
@@ -114,7 +127,7 @@ async def run_question(q: Question, gold: tuple[list, list]) -> dict:
 
     async with (
         meta_mysql_client_manager.session_factory() as meta_session,
-        dw_mysql_client_manager.session_factory() as dw_session,
+        dw_readonly_mysql_client_manager.session_factory() as dw_session,
     ):
         context = DataAgentContext(
             column_qdrant_repository=ColumnQdrantRepository(
@@ -131,14 +144,16 @@ async def run_question(q: Question, gold: tuple[list, list]) -> dict:
         try:
             async with asyncio.timeout(QUESTION_TIMEOUT):
                 async for mode, chunk in graph.astream(
-                    input=DataAgentState(query=q.question),
+                    input=DataAgentState(query=question),
                     context=context,
                     stream_mode=["custom", "updates"],
-                    config={"callbacks": [stats]},
+                    config={"callbacks": [stats], "recursion_limit": 60},
                 ):
                     if mode == "custom":
                         if chunk.get("type") == "result":
                             record["pred_rows"] = chunk["data"]
+                        elif chunk.get("type") == "error":
+                            record["refusal"] = chunk["message"]
                         continue
                     for node, upd in chunk.items():
                         if not upd:
@@ -152,6 +167,11 @@ async def run_question(q: Question, gold: tuple[list, list]) -> dict:
     record["input_tokens"] = stats.input_tokens
     record["output_tokens"] = stats.output_tokens
     record["final_sql"] = record["corrected_sql"] or record["first_sql"]
+    return record
+
+
+async def run_question(q: Question, gold: tuple[list, list]) -> dict:
+    record = await run_agent(q.id, q.question, q.tags, q.difficulty)
 
     # 判分
     gold_cols, gold_rows = gold
@@ -216,7 +236,25 @@ def capture(record: dict, node: str, upd: dict):
     elif node == "generate_sql":
         record["first_sql"] = upd["sql"]
     elif node == "validate_sql":
-        record["validate_error"] = upd.get("error")
+        # 只记录第一次校验的结果，用来衡量“首次生成即通过校验”
+        if upd.get("blocked"):
+            record["blocked"] = True
+        if not record["validated"]:
+            record["validate_error"] = upd.get("error")
+            record["validated"] = True
+    elif node == "run_sql":
+        if upd.get("blocked"):
+            record["blocked"] = True
+        elif upd.get("error"):
+            record["exec_errors"].append(upd["error"])
+    elif node == "repair_sql":
+        record["corrected_sql"] = upd["sql"]
+        record["repairs"] = upd["repairs"]
+    elif node == "verify_result":
+        if upd.get("error"):
+            record["verify_issues"].append(upd["error"])
+        else:
+            record["verified"] = upd.get("verified")
     elif node == "correct_sql":
         record["corrected_sql"] = upd["sql"]
 
@@ -233,7 +271,8 @@ async def main(args):
     embedding_client_manager.init()
     es_client_manager.init()
     meta_mysql_client_manager.init()
-    dw_mysql_client_manager.init()
+    dw_mysql_client_manager.init()  # 只用来执行标准 SQL
+    dw_readonly_mysql_client_manager.init()  # Agent 实际使用的只读连接
 
     try:
         gold = await execute_gold(questions)
@@ -259,6 +298,7 @@ async def main(args):
         await es_client_manager.close()
         await meta_mysql_client_manager.close()
         await dw_mysql_client_manager.close()
+        await dw_readonly_mysql_client_manager.close()
 
     RUNS_DIR.mkdir(exist_ok=True)
     out = RUNS_DIR / f"{args.name}.json"

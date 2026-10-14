@@ -9,7 +9,7 @@ MySQL 客户端管理器
 
 import asyncio
 
-from sqlalchemy import text
+from sqlalchemy import event, text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     async_sessionmaker,
@@ -22,13 +22,19 @@ from app.conf.app_config import DBConfig, app_config
 class MySQLClientManager:
     """管理 MySQL Engine 和 Session 工厂"""
 
-    def __init__(self, config: DBConfig):
+    def __init__(
+        self, config: DBConfig, read_only: bool = False, max_execution_ms: int = 0
+    ):
         # Engine 是数据库连接层核心对象，底层会维护连接池
         self.engine: AsyncEngine | None = None
         # session_factory 用来按需创建新的 AsyncSession
         self.session_factory = None
         # 保存数据库配置，后面拼接连接地址要用
         self.config = config
+        # 只读模式：每个连接都设置为只读事务，并限制单条查询的执行时间。
+        # 这是最后一道防线，即使上层的 SQL 检查被绕过，数据库本身也不会执行写操作或长时间占用资源
+        self.read_only = read_only
+        self.max_execution_ms = max_execution_ms
 
     def _get_url(self) -> str:
         """
@@ -43,6 +49,18 @@ class MySQLClientManager:
         self.engine = create_async_engine(
             self._get_url(), pool_size=10, pool_pre_ping=True
         )
+        if self.read_only:
+
+            @event.listens_for(self.engine.sync_engine, "connect")
+            def set_session_limits(dbapi_connection, _):
+                cursor = dbapi_connection.cursor()
+                cursor.execute("SET SESSION TRANSACTION READ ONLY")
+                if self.max_execution_ms:
+                    cursor.execute(
+                        f"SET SESSION max_execution_time = {int(self.max_execution_ms)}"
+                    )
+                cursor.close()
+
         # 基于 Engine 创建 Session 工厂，后面真正查库时再拿 session
         self.session_factory = async_sessionmaker(
             self.engine, autoflush=True, expire_on_commit=False
@@ -57,6 +75,12 @@ class MySQLClientManager:
 # 后续由不同 repository 按职责分别使用
 meta_mysql_client_manager = MySQLClientManager(app_config.db_meta)
 dw_mysql_client_manager = MySQLClientManager(app_config.db_dw)
+# 问数 Agent 运行时执行 SQL 用的只读连接
+dw_readonly_mysql_client_manager = MySQLClientManager(
+    app_config.db_dw_readonly,
+    read_only=True,
+    max_execution_ms=app_config.agent.query_timeout_ms,
+)
 
 if __name__ == "__main__":
     dw_mysql_client_manager.init()

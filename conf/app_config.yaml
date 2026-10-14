@@ -21,7 +21,15 @@ db_dw:
   port: 3306
   user: didilili
   password: dili123
-  database: dw
+  # 可以用 DW_DATABASE 指向另一个库（例如安全评测用的一次性沙箱库 dw_sandbox）
+  database: ${oc.env:DW_DATABASE,dw}
+
+db_dw_readonly:
+  host: localhost
+  port: 3306
+  user: ${oc.env:DW_RO_USER,dw_ro}
+  password: ${oc.env:DW_RO_PASSWORD,dw_ro_pass}
+  database: ${oc.env:DW_DATABASE,dw}
 
 qdrant:
   host: localhost
@@ -50,3 +58,7 @@ agent:
   as_of_date: "2025-12-31"
   # 功能开关，用环境变量覆盖可以在评测里做消融对比，例如 AGENT_PIN_METRIC_COLUMNS=false
   pin_metric_columns: ${oc.decode:${oc.env:AGENT_PIN_METRIC_COLUMNS,true}}
+  resolve_time: ${oc.decode:${oc.env:AGENT_RESOLVE_TIME,true}}
+  self_correct: ${oc.decode:${oc.env:AGENT_SELF_CORRECT,true}}
+  max_repairs: ${oc.decode:${oc.env:AGENT_MAX_REPAIRS,2}}
+  sql_guard: ${oc.decode:${oc.env:AGENT_SQL_GUARD,true}}

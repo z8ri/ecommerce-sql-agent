@@ -103,6 +103,16 @@ class AgentConfig:
     as_of_date: str = ""
     # 表过滤之后，把选中指标依赖的字段补回上下文（见 pin_metric_columns 节点）
     pin_metric_columns: bool = True
+    # 相对时间表达（上季度、本月、最近7天）由代码解析成明确日期范围，见 time_resolver
+    resolve_time: bool = True
+    # 有界的自纠错循环：校验失败、执行出错、结果复核不通过时修正 SQL 并重新校验
+    self_correct: bool = True
+    # SQL 安全检查（语法树白名单 + 自动补 LIMIT），命中规则的请求直接拒绝，见 sql_guard
+    sql_guard: bool = True
+    # 单次查询返回行数上限，以及数据库侧的执行超时（毫秒）
+    max_rows: int = 1000
+    query_timeout_ms: int = 15000
+    max_repairs: int = 2
 
 
 @dataclass
@@ -112,6 +122,8 @@ class AppConfig:
     logging: LoggingConfig
     db_meta: DBConfig
     db_dw: DBConfig
+    # 问数运行时使用的只读账号：只有 SELECT 权限，与建表/导入数据用的 db_dw 账号分开
+    db_dw_readonly: DBConfig
     qdrant: QdrantConfig
     embedding: EmbeddingConfig
     es: ESConfig

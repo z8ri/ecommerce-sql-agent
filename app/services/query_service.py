@@ -59,7 +59,11 @@ class QueryService:
         try:
             # stream_mode="custom" 对应节点内部 writer(...) 写出的进度消息
             async for chunk in graph.astream(
-                input=state, context=context, stream_mode="custom"
+                input=state,
+                context=context,
+                stream_mode="custom",
+                # 自纠错循环每多一次修正会多走几步，默认的 25 步上限不够用
+                config={"recursion_limit": 60},
             ):
                 # SSE 要求每条消息以 data: 开头，并以两个换行符结束
                 # ensure_ascii=False 保留中文进度文案，default=str 兜底处理日期等非 JSON 类型

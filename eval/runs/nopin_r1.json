@@ -1,0 +1,7117 @@
+{
+ "name": "nopin_r1",
+ "created_at": "2026-10-14T17:41:49",
+ "records": [
+  {
+   "id": "a01",
+   "question": "所有有效订单一共有多少个？",
+   "tags": [
+    "simple_agg",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "所有有效订单一共有多少个？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "连带率",
+    "退款率",
+    "新客订单占比",
+    "实付金额",
+    "平均评分",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT order_id) AS 订单数 FROM fact_order WHERE order_status != '已取消'",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT order_id) AS 订单数 FROM fact_order WHERE order_status != '已取消'",
+   "pred_rows": [
+    {
+     "订单数": 66625
+    }
+   ],
+   "latency_s": 8.09,
+   "llm_calls": 6,
+   "input_tokens": 10872,
+   "output_tokens": 90,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a02",
+   "question": "系统里一共有多少个客户？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "系统",
+    "客户",
+    "系统里一共有多少个客户？"
+   ],
+   "retrieved_metrics": [
+    "平均评分",
+    "下单客户数",
+    "访客数",
+    "订单数",
+    "复购率",
+    "新客订单占比"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "fact_order",
+    "dim_channel",
+    "dim_customer",
+    "dim_coupon",
+    "fact_order_item",
+    "fact_refund",
+    "fact_traffic",
+    "dim_shop",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_customer"
+   ],
+   "final_columns": [
+    "dim_customer.customer_id"
+   ],
+   "selected_metrics": [
+    "下单客户数"
+   ],
+   "first_sql": "SELECT COUNT(*) AS 客户总数 FROM dim_customer;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(*) AS 客户总数 FROM dim_customer;",
+   "pred_rows": [
+    {
+     "客户总数": 12000
+    }
+   ],
+   "latency_s": 7.31,
+   "llm_calls": 6,
+   "input_tokens": 9504,
+   "output_tokens": 58,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a03",
+   "question": "一共有多少家店铺？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "店铺",
+    "一共有多少家店铺？"
+   ],
+   "retrieved_metrics": [
+    "下单客户数",
+    "订单数"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_product.category_l2.家纺",
+    "dim_region.city_tier.新一线",
+    "dim_product.product_name.水星家纺限定款",
+    "dim_product.product_name.水星家纺旗舰款",
+    "dim_product.product_name.罗莱家纺旗舰款",
+    "dim_product.product_name.罗莱家纺入门款",
+    "dim_product.product_name.罗莱家纺限定款",
+    "dim_product.product_name.富安娜家纺旗舰款",
+    "dim_product.product_name.富安娜家纺限定款"
+   ],
+   "merged_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_product",
+    "dim_channel",
+    "fact_order_item",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_shop"
+   ],
+   "final_columns": [
+    "dim_shop.shop_id"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT COUNT(*) AS 店铺数量 FROM dim_shop;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(*) AS 店铺数量 FROM dim_shop;",
+   "pred_rows": [
+    {
+     "店铺数量": 24
+    }
+   ],
+   "latency_s": 5.93,
+   "llm_calls": 6,
+   "input_tokens": 7566,
+   "output_tokens": 53,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a04",
+   "question": "商品库里有多少个不同的品牌？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "不同",
+    "商品",
+    "商品库里有多少个不同的品牌？",
+    "品牌"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "GMV"
+   ],
+   "retrieved_values": [
+    "fact_refund.refund_reason.商品与描述不符",
+    "dim_product.brand.优衣库",
+    "dim_product.product_name.优衣库男装标准款",
+    "dim_product.product_name.优衣库男装旗舰款",
+    "dim_product.product_name.优衣库男装限定款"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date",
+    "fact_order_item",
+    "fact_order",
+    "dim_coupon",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product"
+   ],
+   "final_columns": [
+    "dim_product.brand"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT COUNT(DISTINCT brand) AS 品牌数量 FROM dim_product;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT brand) AS 品牌数量 FROM dim_product;",
+   "pred_rows": [
+    {
+     "品牌数量": 67
+    }
+   ],
+   "latency_s": 8.74,
+   "llm_calls": 6,
+   "input_tokens": 8723,
+   "output_tokens": 73,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a05",
+   "question": "我们的订单一共覆盖了多少个城市？",
+   "tags": [
+    "simple_agg",
+    "multi_join"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "订单",
+    "城市",
+    "我们的订单一共覆盖了多少个城市？",
+    "覆盖"
+   ],
+   "retrieved_metrics": [
+    "下单客户数",
+    "订单数",
+    "连带率",
+    "新客订单占比",
+    "平均评分",
+    "好评率"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.city",
+    "fact_order.region_id"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT COUNT(DISTINCT t2.city) AS 城市数量\nFROM fact_order t1\nJOIN dim_region t2 ON t1.region_id = t2.region_id;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT t2.city) AS 城市数量\nFROM fact_order t1\nJOIN dim_region t2 ON t1.region_id = t2.region_id;",
+   "pred_rows": [
+    {
+     "城市数量": 38
+    }
+   ],
+   "latency_s": 6.78,
+   "llm_calls": 6,
+   "input_tokens": 8965,
+   "output_tokens": 93,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a06",
+   "question": "有哪些销售渠道？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "有哪些销售渠道？",
+    "销售"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "GMV"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "fact_order_item"
+   ],
+   "final_tables": [
+    "dim_channel"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT DISTINCT channel_name AS 销售渠道 FROM dim_channel;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT DISTINCT channel_name AS 销售渠道 FROM dim_channel;",
+   "pred_rows": [
+    {
+     "销售渠道": "微信小程序"
+    },
+    {
+     "销售渠道": "自营App"
+    },
+    {
+     "销售渠道": "H5商城"
+    },
+    {
+     "销售渠道": "天猫"
+    },
+    {
+     "销售渠道": "京东"
+    }
+   ],
+   "latency_s": 6.23,
+   "llm_calls": 6,
+   "input_tokens": 7891,
+   "output_tokens": 59,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a07",
+   "question": "商品一共分为哪几个一级品类？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "哪几个",
+    "商品一共分为哪几个一级品类？",
+    "品类",
+    "分为",
+    "商品"
+   ],
+   "retrieved_metrics": [
+    "GMV"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线",
+    "fact_refund.refund_reason.商品与描述不符"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "fact_order",
+    "dim_date",
+    "fact_order_item",
+    "dim_coupon",
+    "dim_region",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product"
+   ],
+   "final_columns": [
+    "dim_product.category_l1"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT DISTINCT category_l1 AS 一级品类 FROM dim_product;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT DISTINCT category_l1 AS 一级品类 FROM dim_product;",
+   "pred_rows": [
+    {
+     "一级品类": "手机数码"
+    },
+    {
+     "一级品类": "家用电器"
+    },
+    {
+     "一级品类": "美妆护肤"
+    },
+    {
+     "一级品类": "服饰鞋包"
+    },
+    {
+     "一级品类": "食品生鲜"
+    }
+   ],
+   "latency_s": 8.27,
+   "llm_calls": 6,
+   "input_tokens": 9317,
+   "output_tokens": 70,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 8,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a08",
+   "question": "优惠券有哪几种类型？",
+   "tags": [
+    "simple_agg"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "哪几种",
+    "优惠券",
+    "类型",
+    "优惠券有哪几种类型？"
+   ],
+   "retrieved_metrics": [
+    "用券订单占比",
+    "优惠率"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_type.新人券",
+    "dim_coupon.coupon_type.满减券",
+    "dim_coupon.coupon_type.无门槛券",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_coupon.coupon_name.无门槛15元券",
+    "dim_coupon.coupon_name.无门槛30元券"
+   ],
+   "merged_tables": [
+    "dim_coupon",
+    "fact_order",
+    "dim_date",
+    "dim_product",
+    "dim_channel",
+    "dim_shop",
+    "dim_region",
+    "dim_customer"
+   ],
+   "final_tables": [
+    "dim_coupon"
+   ],
+   "final_columns": [
+    "dim_coupon.coupon_type"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT DISTINCT coupon_type AS 优惠券类型 FROM dim_coupon;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT DISTINCT coupon_type AS 优惠券类型 FROM dim_coupon;",
+   "pred_rows": [
+    {
+     "优惠券类型": "新人券"
+    },
+    {
+     "优惠券类型": "满减券"
+    },
+    {
+     "优惠券类型": "无门槛券"
+    }
+   ],
+   "latency_s": 7.91,
+   "llm_calls": 6,
+   "input_tokens": 7571,
+   "output_tokens": 65,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 3,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a09",
+   "question": "标价最高的商品是哪个？",
+   "tags": [
+    "ranking"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "最高",
+    "标价",
+    "标价最高的商品是哪个？",
+    "商品"
+   ],
+   "retrieved_metrics": [
+    "GMV"
+   ],
+   "retrieved_values": [
+    "fact_refund.refund_reason.商品与描述不符"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date",
+    "fact_order_item",
+    "fact_order",
+    "dim_coupon",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product"
+   ],
+   "final_columns": [
+    "dim_product.product_name",
+    "dim_product.list_price"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT product_name AS 商品名称 FROM dim_product ORDER BY list_price DESC LIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT product_name AS 商品名称 FROM dim_product ORDER BY list_price DESC LIMIT 1",
+   "pred_rows": [
+    {
+     "商品名称": "华为电脑平板旗舰款"
+    }
+   ],
+   "latency_s": 8.4,
+   "llm_calls": 6,
+   "input_tokens": 9071,
+   "output_tokens": 87,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a10",
+   "question": "一共有多少个已退款的订单？",
+   "tags": [
+    "filter_value"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "订单",
+    "退款",
+    "一共有多少个已退款的订单？"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "净销售额",
+    "订单数",
+    "实付金额",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "新客订单占比",
+    "平均评分",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款",
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_coupon",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(*) AS 已退款订单数 FROM fact_order WHERE order_status = '已退款';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(*) AS 已退款订单数 FROM fact_order WHERE order_status = '已退款';",
+   "pred_rows": [
+    {
+     "已退款订单数": 3093
+    }
+   ],
+   "latency_s": 9.02,
+   "llm_calls": 6,
+   "input_tokens": 10282,
+   "output_tokens": 95,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "a11",
+   "question": "2025年一共有多少个有效订单？",
+   "tags": [
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "2025年一共有多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "GMV",
+    "连带率",
+    "实付金额",
+    "新客订单占比",
+    "好评率",
+    "平均评分",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "订单数": 36609
+    }
+   ],
+   "latency_s": 8.13,
+   "llm_calls": 6,
+   "input_tokens": 11047,
+   "output_tokens": 165,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b01",
+   "question": "广东的有效订单数是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "有效",
+    "广东的有效订单数是多少？",
+    "广东",
+    "订单数"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "连带率",
+    "客单价",
+    "下单客户数",
+    "好评率",
+    "平均评分",
+    "新客订单占比",
+    "GMV",
+    "实付金额",
+    "用券订单占比",
+    "退款率"
+   ],
+   "retrieved_values": [
+    "dim_region.province.广东省"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_region",
+    "dim_shop",
+    "dim_product"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_region"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.region_id",
+    "dim_region.province",
+    "dim_region.region_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消' AND dr.province = '广东省';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消' AND dr.province = '广东省';",
+   "pred_rows": [
+    {
+     "有效订单数": 10306
+    }
+   ],
+   "latency_s": 7.4,
+   "llm_calls": 6,
+   "input_tokens": 10889,
+   "output_tokens": 142,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b02",
+   "question": "北京的GMV是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "北京的GMV是多少？",
+    "北京"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.province.北京市",
+    "dim_region.city.北京市"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.city",
+    "dim_region.region_id",
+    "fact_order.region_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_region t1\nJOIN fact_order t2 ON t1.region_id = t2.region_id\nWHERE t1.city = '北京市' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_region t1\nJOIN fact_order t2 ON t1.region_id = t2.region_id\nWHERE t1.city = '北京市' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 5233503.36
+    }
+   ],
+   "latency_s": 6.36,
+   "llm_calls": 6,
+   "input_tokens": 7160,
+   "output_tokens": 118,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b03",
+   "question": "深圳的客单价是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "深圳",
+    "深圳的客单价是多少？",
+    "单价"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "连带率",
+    "下单客户数",
+    "平均评分",
+    "GMV",
+    "订单数",
+    "实付金额",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_region.city.深圳市"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order_item",
+    "dim_product",
+    "fact_order"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order_item",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.city",
+    "dim_region.region_id",
+    "fact_order_item.item_amount",
+    "fact_order_item.order_id",
+    "fact_order.region_id",
+    "fact_order.order_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(t2.pay_amount) / COUNT(DISTINCT t2.order_id) AS 客单价\nFROM dim_region t1\nINNER JOIN fact_order t2 ON t1.region_id = t2.region_id\nWHERE t1.city = '深圳市' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.pay_amount) / COUNT(DISTINCT t2.order_id) AS 客单价\nFROM dim_region t1\nINNER JOIN fact_order t2 ON t1.region_id = t2.region_id\nWHERE t1.city = '深圳市' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1398.683045
+    }
+   ],
+   "latency_s": 8.08,
+   "llm_calls": 6,
+   "input_tokens": 9111,
+   "output_tokens": 166,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b04",
+   "question": "苹果品牌的销量是多少？",
+   "tags": [
+    "filter_value",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "苹果品牌的销量是多少？",
+    "苹果",
+    "销量",
+    "品牌"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "GMV",
+    "下单客户数",
+    "净销售额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_product.brand.苹果",
+    "dim_product.product_name.苹果手机入门款",
+    "dim_product.product_name.苹果手机标准款",
+    "dim_product.product_name.苹果手机旗舰款",
+    "dim_product.product_name.苹果智能穿戴旗舰款",
+    "dim_product.product_name.苹果智能穿戴标准款",
+    "dim_product.product_name.苹果智能穿戴限定款",
+    "dim_product.product_name.苹果电脑平板旗舰款",
+    "dim_product.product_name.苹果电脑平板标准款",
+    "dim_product.product_name.苹果电脑平板入门款"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "fact_order_item",
+    "dim_channel",
+    "fact_order",
+    "fact_traffic",
+    "dim_coupon",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.brand",
+    "dim_product.product_id",
+    "fact_order_item.quantity",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(foi.quantity) AS 销量\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '苹果';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(foi.quantity) AS 销量\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '苹果';",
+   "pred_rows": [
+    {
+     "销量": 4998.0
+    }
+   ],
+   "latency_s": 6.48,
+   "llm_calls": 6,
+   "input_tokens": 9797,
+   "output_tokens": 115,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b05",
+   "question": "华为手机一共卖了多少钱？",
+   "tags": [
+    "filter_value",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "手机",
+    "华为",
+    "华为手机一共卖了多少钱？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "实付金额",
+    "订单数",
+    "下单客户数",
+    "净销售额",
+    "客单价",
+    "访客数",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "dim_product.category_l2.手机",
+    "dim_shop.main_category.手机数码",
+    "dim_product.category_l1.手机数码",
+    "dim_product.product_name.苹果手机入门款",
+    "dim_product.product_name.苹果手机标准款",
+    "dim_product.product_name.苹果手机旗舰款",
+    "dim_product.product_name.华为手机限定款",
+    "dim_product.product_name.华为手机旗舰款",
+    "dim_product.product_name.华为手机入门款",
+    "dim_product.product_name.小米手机旗舰款",
+    "dim_product.product_name.小米手机入门款",
+    "dim_product.product_name.OPPO手机入门款",
+    "dim_product.product_name.OPPO手机旗舰款",
+    "dim_product.brand.华为",
+    "dim_product.product_name.华为耳机音频限定款",
+    "dim_product.product_name.华为耳机音频标准款",
+    "dim_product.product_name.华为智能穿戴标准款",
+    "dim_product.product_name.华为智能穿戴限定款",
+    "dim_product.product_name.华为电脑平板旗舰款",
+    "dim_product.product_name.华为电脑平板限定款",
+    "dim_product.product_name.华为电脑平板入门款",
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_product",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order_item",
+    "dim_product"
+   ],
+   "final_columns": [
+    "fact_order_item.order_id",
+    "fact_order_item.item_amount",
+    "fact_order_item.product_id",
+    "dim_product.brand",
+    "dim_product.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(foi.item_amount) AS 华为手机销售额\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '华为';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(foi.item_amount) AS 华为手机销售额\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '华为';",
+   "pred_rows": [
+    {
+     "华为手机销售额": 19683694.09
+    }
+   ],
+   "latency_s": 7.64,
+   "llm_calls": 6,
+   "input_tokens": 11439,
+   "output_tokens": 134,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b06",
+   "question": "天猫渠道的有效订单数是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "天猫",
+    "订单数",
+    "有效",
+    "天猫渠道的有效订单数是多少？"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "订单数",
+    "连带率",
+    "客单价",
+    "下单客户数",
+    "好评率",
+    "平均评分",
+    "新客订单占比",
+    "GMV",
+    "实付金额",
+    "用券订单占比",
+    "退款率",
+    "复购率",
+    "转化率",
+    "净销售额",
+    "优惠率"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道",
+    "dim_customer.register_channel.天猫",
+    "dim_channel.channel_name.天猫"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "fact_order",
+    "fact_traffic",
+    "dim_customer",
+    "dim_shop",
+    "fact_order_item",
+    "fact_refund",
+    "dim_product",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.order_id",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE dc.channel_name = '天猫' AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE dc.channel_name = '天猫' AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "订单数": 12540
+    }
+   ],
+   "latency_s": 8.53,
+   "llm_calls": 6,
+   "input_tokens": 12449,
+   "output_tokens": 141,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b07",
+   "question": "抖音直播渠道的GMV是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "渠道",
+    "直播",
+    "抖音直播渠道的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "访客数",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_customer.register_channel.抖音直播",
+    "dim_channel.channel_name.抖音直播",
+    "dim_channel.channel_type.自营渠道"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "fact_order_item",
+    "dim_coupon",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_channel t1\nINNER JOIN fact_order t2 ON t1.channel_id = t2.channel_id\nWHERE t1.channel_name = '抖音直播' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_channel t1\nINNER JOIN fact_order t2 ON t1.channel_id = t2.channel_id\nWHERE t1.channel_name = '抖音直播' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 9452840.66
+    }
+   ],
+   "latency_s": 8.07,
+   "llm_calls": 6,
+   "input_tokens": 10243,
+   "output_tokens": 152,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b08",
+   "question": "金牌会员一共下了多少个有效订单？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "有效",
+    "金牌会员一共下了多少个有效订单？",
+    "会员",
+    "订单",
+    "金牌"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "连带率",
+    "退款率",
+    "新客订单占比",
+    "实付金额",
+    "转化率",
+    "用券订单占比",
+    "平均评分",
+    "好评率"
+   ],
+   "retrieved_values": [
+    "dim_customer.member_level.金牌会员",
+    "dim_date.weekday.周一",
+    "dim_customer.member_level.银牌会员",
+    "dim_customer.member_level.普通会员",
+    "dim_customer.member_level.钻石会员",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "dim_customer",
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "fact_traffic",
+    "dim_date",
+    "dim_shop",
+    "dim_channel",
+    "dim_coupon",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_customer",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_customer.member_level",
+    "dim_customer.customer_id",
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.customer_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消' AND dc.member_level = '金牌会员';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消' AND dc.member_level = '金牌会员';",
+   "pred_rows": [
+    {
+     "订单数": 16087
+    }
+   ],
+   "latency_s": 9.55,
+   "llm_calls": 6,
+   "input_tokens": 11614,
+   "output_tokens": 145,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b09",
+   "question": "女性客户贡献的GMV是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "贡献",
+    "客户",
+    "女性",
+    "女性客户贡献的GMV是多少？",
+    "GMV"
+   ],
+   "retrieved_metrics": [
+    "平均评分",
+    "下单客户数",
+    "访客数",
+    "GMV",
+    "订单数",
+    "客单价",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_product",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_customer"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.customer_id",
+    "fact_order.pay_amount",
+    "dim_customer.customer_id",
+    "dim_customer.gender"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(fo.pay_amount) AS GMV\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消' AND dc.gender = '女';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(fo.pay_amount) AS GMV\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消' AND dc.gender = '女';",
+   "pred_rows": [
+    {
+     "GMV": 52442157.95
+    }
+   ],
+   "latency_s": 9.31,
+   "llm_calls": 6,
+   "input_tokens": 10776,
+   "output_tokens": 150,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b10",
+   "question": "25-34岁客户的客单价是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "25-34岁客户的客单价是多少？",
+    "单价",
+    "客户"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "连带率",
+    "下单客户数",
+    "平均评分",
+    "GMV",
+    "访客数",
+    "订单数",
+    "实付金额",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_customer.age_group.25-34岁",
+    "dim_coupon.coupon_name.满200减25",
+    "dim_customer.age_group.45岁以上",
+    "dim_customer.age_group.35-44岁",
+    "dim_customer.age_group.18-24岁"
+   ],
+   "merged_tables": [
+    "dim_customer",
+    "fact_order",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_product",
+    "fact_order_item",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "dim_customer",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_customer.customer_id",
+    "dim_customer.age_group",
+    "fact_order.customer_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT AVG(t2.pay_amount) AS 客单价\nFROM dim_customer t1\nINNER JOIN fact_order t2 ON t1.customer_id = t2.customer_id\nWHERE t1.age_group = '25-34岁' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT AVG(t2.pay_amount) AS 客单价\nFROM dim_customer t1\nINNER JOIN fact_order t2 ON t1.customer_id = t2.customer_id\nWHERE t1.age_group = '25-34岁' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1437.270655
+    }
+   ],
+   "latency_s": 9.61,
+   "llm_calls": 6,
+   "input_tokens": 10278,
+   "output_tokens": 161,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b11",
+   "question": "所有旗舰店的GMV加起来是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "旗舰店",
+    "GMV",
+    "起来",
+    "所有旗舰店的GMV加起来是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "dim_shop.shop_type.旗舰店",
+    "dim_shop.shop_name.领航生鲜旗舰店",
+    "dim_shop.shop_name.嘉禾户外旗舰店",
+    "dim_shop.shop_name.优选家居旗舰店",
+    "dim_shop.shop_name.悦享数码旗舰店",
+    "dim_shop.shop_name.臻品家电旗舰店",
+    "dim_shop.shop_name.星选服饰旗舰店",
+    "dim_shop.shop_name.爱购母婴旗舰店",
+    "dim_shop.shop_name.百汇美妆旗舰店",
+    "dim_shop.shop_type.自营店",
+    "dim_shop.shop_type.专营店",
+    "dim_shop.shop_name.嘉禾生鲜自营店",
+    "dim_shop.shop_name.优选母婴自营店",
+    "dim_shop.shop_name.百汇数码自营店",
+    "dim_shop.shop_name.星选家电自营店",
+    "dim_shop.shop_name.领航美妆自营店",
+    "dim_shop.shop_name.领航服饰专营店",
+    "dim_shop.shop_name.爱购服饰自营店",
+    "dim_shop.shop_name.嘉禾母婴专营店",
+    "dim_shop.shop_name.优选户外专营店"
+   ],
+   "merged_tables": [
+    "dim_shop",
+    "dim_channel",
+    "dim_product",
+    "fact_traffic",
+    "fact_order"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_shop.shop_type",
+    "dim_shop.shop_id",
+    "fact_order.shop_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_shop t1\nJOIN fact_order t2 ON t1.shop_id = t2.shop_id\nWHERE t1.shop_type = '旗舰店' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_shop t1\nJOIN fact_order t2 ON t1.shop_id = t2.shop_id\nWHERE t1.shop_type = '旗舰店' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 34754995.15
+    }
+   ],
+   "latency_s": 7.87,
+   "llm_calls": 6,
+   "input_tokens": 8157,
+   "output_tokens": 141,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b12",
+   "question": "悦享数码旗舰店有多少个有效订单？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "有效",
+    "悦享数码旗舰店有多少个有效订单？",
+    "数码",
+    "旗舰店",
+    "订单"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "连带率",
+    "退款率",
+    "新客订单占比",
+    "实付金额",
+    "用券订单占比",
+    "好评率",
+    "平均评分"
+   ],
+   "retrieved_values": [
+    "dim_shop.shop_name.悦享数码旗舰店",
+    "dim_shop.shop_name.悦享户外自营店",
+    "dim_shop.shop_name.悦享家居专营店",
+    "dim_shop.shop_type.旗舰店",
+    "dim_shop.shop_name.领航生鲜旗舰店",
+    "dim_shop.shop_name.嘉禾户外旗舰店",
+    "dim_shop.shop_name.优选家居旗舰店",
+    "dim_shop.shop_name.臻品家电旗舰店",
+    "dim_shop.shop_name.星选服饰旗舰店",
+    "dim_shop.shop_name.爱购母婴旗舰店",
+    "dim_shop.shop_name.百汇美妆旗舰店",
+    "dim_shop.shop_name.百汇数码自营店",
+    "dim_shop.shop_name.臻品数码专营店",
+    "dim_shop.main_category.手机数码",
+    "dim_product.category_l1.手机数码",
+    "dim_shop.shop_type.自营店",
+    "dim_shop.shop_type.专营店",
+    "dim_shop.shop_name.嘉禾生鲜自营店",
+    "dim_shop.shop_name.优选母婴自营店",
+    "dim_shop.shop_name.星选家电自营店",
+    "dim_shop.shop_name.领航美妆自营店",
+    "dim_shop.shop_name.领航服饰专营店",
+    "dim_shop.shop_name.爱购服饰自营店",
+    "dim_shop.shop_name.嘉禾母婴专营店",
+    "dim_shop.shop_name.优选户外专营店"
+   ],
+   "merged_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_channel",
+    "dim_customer",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_shop.shop_name",
+    "dim_shop.shop_id",
+    "fact_order.shop_id",
+    "fact_order.order_status",
+    "fact_order.order_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_shop ds ON fo.shop_id = ds.shop_id\nWHERE ds.shop_name = '悦享数码旗舰店' AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_shop ds ON fo.shop_id = ds.shop_id\nWHERE ds.shop_name = '悦享数码旗舰店' AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "订单数": 3271
+    }
+   ],
+   "latency_s": 9.21,
+   "llm_calls": 6,
+   "input_tokens": 11299,
+   "output_tokens": 149,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b13",
+   "question": "一线城市的GMV是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "城市",
+    "一线城市的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线",
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.二线",
+    "dim_region.city_tier.三线及以下"
+   ],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.city_tier",
+    "dim_region.region_id",
+    "fact_order.region_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM fact_order t2\nJOIN dim_region t1 ON t2.region_id = t1.region_id\nWHERE t1.city_tier = '一线' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM fact_order t2\nJOIN dim_region t1 ON t2.region_id = t1.region_id\nWHERE t1.city_tier = '一线' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 21168228.37
+    }
+   ],
+   "latency_s": 7.35,
+   "llm_calls": 6,
+   "input_tokens": 7458,
+   "output_tokens": 137,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b14",
+   "question": "东北地区的退款率是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "退款",
+    "东北地区的退款率是多少？",
+    "东北地区"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "复购率",
+    "净销售额",
+    "优惠率",
+    "好评率",
+    "用券订单占比",
+    "实付金额",
+    "转化率",
+    "新客订单占比",
+    "订单数"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款",
+    "dim_region.region_name.东北"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_region",
+    "dim_customer",
+    "dim_shop",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_region"
+   ],
+   "final_columns": [
+    "fact_order.order_id",
+    "fact_order.order_status",
+    "fact_order.region_id",
+    "dim_region.region_name",
+    "dim_region.region_id"
+   ],
+   "selected_metrics": [
+    "退款率"
+   ],
+   "first_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 100.0 / NULLIF(COUNT(CASE WHEN fo.order_status != '已取消' THEN 1 END), 0) AS 退款率\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE dr.region_name = '东北';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 100.0 / NULLIF(COUNT(CASE WHEN fo.order_status != '已取消' THEN 1 END), 0) AS 退款率\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE dr.region_name = '东北';",
+   "pred_rows": [
+    {
+     "退款率": 4.82923
+    }
+   ],
+   "latency_s": 9.36,
+   "llm_calls": 6,
+   "input_tokens": 11282,
+   "output_tokens": 182,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "b15",
+   "question": "用了满减券的有效订单有多少个？",
+   "tags": [
+    "filter_value",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "减券",
+    "用了满减券的有效订单有多少个？"
+   ],
+   "retrieved_metrics": [
+    "用券订单占比",
+    "订单数",
+    "优惠率",
+    "下单客户数",
+    "连带率",
+    "实付金额",
+    "客单价",
+    "新客订单占比",
+    "退款率",
+    "GMV",
+    "平均评分",
+    "净销售额",
+    "好评率"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_type.满减券",
+    "dim_coupon.coupon_name.满100减10",
+    "dim_coupon.coupon_name.满200减25",
+    "dim_coupon.coupon_name.满500减70",
+    "dim_coupon.coupon_name.满1000减160",
+    "dim_coupon.coupon_name.满3000减500",
+    "dim_coupon.coupon_type.新人券",
+    "dim_coupon.coupon_type.无门槛券",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_coupon.coupon_name.无门槛15元券",
+    "dim_coupon.coupon_name.无门槛30元券",
+    "dim_coupon.coupon_name.新人立减10元",
+    "dim_coupon.coupon_name.新人立减20元"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_coupon",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_coupon"
+   ],
+   "final_columns": [
+    "fact_order.coupon_id",
+    "fact_order.order_status",
+    "dim_coupon.coupon_id",
+    "dim_coupon.coupon_type"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(*) AS 订单数\nFROM fact_order fo\nJOIN dim_coupon dc ON fo.coupon_id = dc.coupon_id\nWHERE fo.order_status != '已取消' AND dc.coupon_type = '满减券';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(*) AS 订单数\nFROM fact_order fo\nJOIN dim_coupon dc ON fo.coupon_id = dc.coupon_id\nWHERE fo.order_status != '已取消' AND dc.coupon_type = '满减券';",
+   "pred_rows": [
+    {
+     "订单数": 11894
+    }
+   ],
+   "latency_s": 8.4,
+   "llm_calls": 6,
+   "input_tokens": 11777,
+   "output_tokens": 160,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c01",
+   "question": "2025年的GMV是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_traffic",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.date_id >= 20250101 AND t2.date_id <= 20251231",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.date_id >= 20250101 AND t2.date_id <= 20251231",
+   "pred_rows": [
+    {
+     "GMV": 53826659.41
+    }
+   ],
+   "latency_s": 8.36,
+   "llm_calls": 6,
+   "input_tokens": 9190,
+   "output_tokens": 148,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c02",
+   "question": "2025年的实付金额是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "金额",
+    "2025年的实付金额是多少？",
+    "实付"
+   ],
+   "retrieved_metrics": [
+    "实付金额",
+    "GMV",
+    "客单价",
+    "净销售额"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "实付金额"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) AS 实付金额\nFROM fact_order t1\nINNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.date_id >= 20250101 AND t2.date_id <= 20251231\n  AND t1.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.pay_amount) AS 实付金额\nFROM fact_order t1\nINNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.date_id >= 20250101 AND t2.date_id <= 20251231\n  AND t1.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "实付金额": 52807909.26
+    }
+   ],
+   "latency_s": 8.64,
+   "llm_calls": 6,
+   "input_tokens": 8843,
+   "output_tokens": 167,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c03",
+   "question": "2025年的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "单价",
+    "2025年的客单价是多少？"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "订单数",
+    "连带率",
+    "GMV",
+    "平均评分",
+    "实付金额",
+    "下单客户数",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "fact_traffic",
+    "dim_date",
+    "dim_product"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.year = 2025",
+   "pred_rows": [
+    {
+     "客单价": 1442.484342
+    }
+   ],
+   "latency_s": 6.49,
+   "llm_calls": 6,
+   "input_tokens": 9967,
+   "output_tokens": 151,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c04",
+   "question": "2025年的退款率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "退款",
+    "2025年的退款率是多少？"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "复购率",
+    "净销售额",
+    "优惠率",
+    "好评率",
+    "用券订单占比",
+    "实付金额",
+    "转化率",
+    "新客订单占比",
+    "订单数"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_tables": [
+    "fact_order",
+    "fact_refund",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_refund.order_id",
+    "fact_refund.date_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "退款率"
+   ],
+   "first_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 1.0 / NULLIF(COUNT(CASE WHEN fo.order_status != '已取消' THEN 1 END), 0) AS 退款率\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 1.0 / NULLIF(COUNT(CASE WHEN fo.order_status != '已取消' THEN 1 END), 0) AS 退款率\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "退款率": 0.04747
+    }
+   ],
+   "latency_s": 9.37,
+   "llm_calls": 6,
+   "input_tokens": 10230,
+   "output_tokens": 209,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c05",
+   "question": "2025年的复购率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "复购",
+    "2025年的复购率是多少？"
+   ],
+   "retrieved_metrics": [
+    "复购率",
+    "退款率",
+    "加购率",
+    "转化率",
+    "好评率",
+    "新客订单占比",
+    "用券订单占比",
+    "下单客户数"
+   ],
+   "retrieved_values": [
+    "dim_shop.shop_name.爱购服饰自营店",
+    "dim_shop.shop_name.爱购生鲜专营店",
+    "dim_shop.shop_name.爱购母婴旗舰店"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_customer",
+    "fact_traffic",
+    "dim_channel",
+    "fact_order_item",
+    "dim_coupon",
+    "dim_shop",
+    "fact_refund",
+    "dim_product",
+    "dim_date"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.is_new_customer",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "复购率"
+   ],
+   "first_sql": "SELECT \n  COUNT(DISTINCT CASE WHEN order_count >= 2 THEN customer_id END) * 1.0 / NULLIF(COUNT(DISTINCT customer_id), 0) AS 复购率\nFROM (\n  SELECT \n    customer_id,\n    COUNT(*) AS order_count\n  FROM fact_order fo\n  INNER JOIN dim_date dd ON fo.date_id = dd.date_id\n  WHERE dd.year = 2025 \n    AND fo.order_status NOT IN ('已取消', '已退款')\n  GROUP BY customer_id\n) t",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(DISTINCT CASE WHEN order_count >= 2 THEN customer_id END) * 1.0 / NULLIF(COUNT(DISTINCT customer_id), 0) AS 复购率\nFROM (\n  SELECT \n    customer_id,\n    COUNT(*) AS order_count\n  FROM fact_order fo\n  INNER JOIN dim_date dd ON fo.date_id = dd.date_id\n  WHERE dd.year = 2025 \n    AND fo.order_status NOT IN ('已取消', '已退款')\n  GROUP BY customer_id\n) t",
+   "pred_rows": [
+    {
+     "复购率": 0.73279
+    }
+   ],
+   "latency_s": 8.25,
+   "llm_calls": 6,
+   "input_tokens": 9863,
+   "output_tokens": 211,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c06",
+   "question": "2025年新客订单占比是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "2025年新客订单占比是多少？"
+   ],
+   "retrieved_metrics": [
+    "新客订单占比",
+    "复购率",
+    "用券订单占比",
+    "好评率",
+    "下单客户数",
+    "订单数",
+    "转化率",
+    "加购率",
+    "平均评分",
+    "退款率",
+    "连带率",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_customer",
+    "dim_coupon",
+    "dim_channel",
+    "fact_traffic",
+    "dim_date",
+    "fact_refund",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.is_new_customer"
+   ],
+   "selected_metrics": [
+    "新客订单占比"
+   ],
+   "first_sql": "SELECT \n  SUM(CASE WHEN is_new_customer = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS `新客订单占比`\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20250101\n  AND date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  SUM(CASE WHEN is_new_customer = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS `新客订单占比`\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20250101\n  AND date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "新客订单占比": 10.19968
+    }
+   ],
+   "latency_s": 9.98,
+   "llm_calls": 6,
+   "input_tokens": 11042,
+   "output_tokens": 186,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c07",
+   "question": "2025年的好评率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年的好评率是多少？",
+    "好评率"
+   ],
+   "retrieved_metrics": [
+    "好评率",
+    "平均评分",
+    "优惠率",
+    "退款率",
+    "复购率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.review_score",
+    "fact_order.order_status",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "好评率"
+   ],
+   "first_sql": "SELECT \n  COUNT(CASE WHEN review_score >= 4 THEN 1 END) * 100.0 / NULLIF(COUNT(CASE WHEN review_score IS NOT NULL THEN 1 END), 0) AS 好评率\nFROM fact_order\nWHERE order_status != '已取消' \n  AND date_id >= 20250101 \n  AND date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(CASE WHEN review_score >= 4 THEN 1 END) * 100.0 / NULLIF(COUNT(CASE WHEN review_score IS NOT NULL THEN 1 END), 0) AS 好评率\nFROM fact_order\nWHERE order_status != '已取消' \n  AND date_id >= 20250101 \n  AND date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "好评率": 85.70616
+    }
+   ],
+   "latency_s": 7.38,
+   "llm_calls": 6,
+   "input_tokens": 5522,
+   "output_tokens": 176,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c08",
+   "question": "2025年的平均评分是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "平均",
+    "2025年的平均评分是多少？",
+    "评分"
+   ],
+   "retrieved_metrics": [
+    "平均评分",
+    "好评率",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_product",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.review_score",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "平均评分"
+   ],
+   "first_sql": "SELECT AVG(review_score) AS 平均评分 FROM fact_order WHERE date_id >= 20250101 AND date_id <= 20251231 AND review_score IS NOT NULL;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT AVG(review_score) AS 平均评分 FROM fact_order WHERE date_id >= 20250101 AND date_id <= 20251231 AND review_score IS NOT NULL;",
+   "pred_rows": [
+    {
+     "平均评分": 4.4014
+    }
+   ],
+   "latency_s": 6.66,
+   "llm_calls": 6,
+   "input_tokens": 6487,
+   "output_tokens": 115,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c09",
+   "question": "2025年的平均配送时长是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "配送",
+    "平均",
+    "2025年的平均配送时长是多少？",
+    "时长"
+   ],
+   "retrieved_metrics": [
+    "平均配送时长",
+    "平均评分"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "fact_traffic",
+    "dim_shop",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.delivery_days",
+    "fact_order.order_status",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "平均配送时长"
+   ],
+   "first_sql": "SELECT AVG(t1.delivery_days) AS 平均配送时长\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.year = 2025;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT AVG(t1.delivery_days) AS 平均配送时长\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.year = 2025;",
+   "pred_rows": [
+    {
+     "平均配送时长": 2.367
+    }
+   ],
+   "latency_s": 8.61,
+   "llm_calls": 6,
+   "input_tokens": 9030,
+   "output_tokens": 155,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c10",
+   "question": "2025年的优惠率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年的优惠率是多少？",
+    "优惠"
+   ],
+   "retrieved_metrics": [
+    "优惠率",
+    "用券订单占比",
+    "退款率",
+    "好评率",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "dim_coupon",
+    "dim_product",
+    "dim_shop",
+    "fact_refund",
+    "dim_channel",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.discount_amount",
+    "fact_order.gross_amount",
+    "fact_order.order_status",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "优惠率"
+   ],
+   "first_sql": "SELECT \n  SUM(t1.discount_amount) / SUM(t1.gross_amount) AS 优惠率\nFROM \n  fact_order t1\n  INNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE \n  t1.order_status != '已取消' \n  AND t2.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  SUM(t1.discount_amount) / SUM(t1.gross_amount) AS 优惠率\nFROM \n  fact_order t1\n  INNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE \n  t1.order_status != '已取消' \n  AND t2.year = 2025",
+   "pred_rows": [
+    {
+     "优惠率": 0.019382
+    }
+   ],
+   "latency_s": 7.32,
+   "llm_calls": 6,
+   "input_tokens": 9473,
+   "output_tokens": 163,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c11",
+   "question": "2025年用券订单占比是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "用券",
+    "2025年用券订单占比是多少？"
+   ],
+   "retrieved_metrics": [
+    "用券订单占比",
+    "优惠率",
+    "退款率",
+    "新客订单占比",
+    "好评率",
+    "订单数",
+    "转化率",
+    "复购率",
+    "连带率",
+    "客单价",
+    "平均评分",
+    "实付金额",
+    "下单客户数"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_type.新人券",
+    "dim_coupon.coupon_type.满减券",
+    "dim_coupon.coupon_type.无门槛券",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_coupon.coupon_name.无门槛15元券",
+    "dim_coupon.coupon_name.无门槛30元券"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_traffic",
+    "dim_date",
+    "fact_refund",
+    "fact_order_item",
+    "dim_coupon",
+    "dim_product",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.coupon_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "用券订单占比"
+   ],
+   "first_sql": "SELECT \n  COUNT(CASE WHEN fo.coupon_id IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS `用券订单占比`\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231\n  AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(CASE WHEN fo.coupon_id IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS `用券订单占比`\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231\n  AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "用券订单占比": 34.65541
+    }
+   ],
+   "latency_s": 8.96,
+   "llm_calls": 6,
+   "input_tokens": 11118,
+   "output_tokens": 202,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c12",
+   "question": "2025年的连带率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "multi_join"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "2025年的连带率是多少？",
+    "连带"
+   ],
+   "retrieved_metrics": [
+    "连带率",
+    "客单价",
+    "平均评分",
+    "订单数",
+    "下单客户数",
+    "好评率",
+    "平均配送时长",
+    "复购率",
+    "新客订单占比",
+    "用券订单占比"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order_item",
+    "fact_order"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.order_id",
+    "fact_order.order_status",
+    "fact_order.gross_amount",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "连带率"
+   ],
+   "first_sql": "SELECT SUM(foi.quantity) / COUNT(DISTINCT fo.order_id) AS 连带率\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(foi.quantity) / COUNT(DISTINCT fo.order_id) AS 连带率\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.year = 2025",
+   "pred_rows": [
+    {
+     "连带率": 2.1655
+    }
+   ],
+   "latency_s": 7.78,
+   "llm_calls": 6,
+   "input_tokens": 7631,
+   "output_tokens": 170,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c13",
+   "question": "2025年有多少个客户下过单？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年有多少个客户下过单？",
+    "客户",
+    "下过"
+   ],
+   "retrieved_metrics": [
+    "下单客户数",
+    "订单数",
+    "连带率",
+    "访客数",
+    "复购率",
+    "实付金额",
+    "平均评分",
+    "新客订单占比",
+    "客单价",
+    "GMV"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_customer",
+    "fact_order",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_product",
+    "dim_date",
+    "fact_refund",
+    "fact_order_item",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.customer_id",
+    "fact_order.date_id",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "下单客户数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.customer_id) AS 下单客户数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025\n  AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.customer_id) AS 下单客户数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025\n  AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "下单客户数": 9597
+    }
+   ],
+   "latency_s": 7.76,
+   "llm_calls": 6,
+   "input_tokens": 10816,
+   "output_tokens": 153,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c14",
+   "question": "2025年的净销售额是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "cross_fact"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "2025年的净销售额是多少？",
+    "销售额"
+   ],
+   "retrieved_metrics": [
+    "净销售额",
+    "实付金额",
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_channel",
+    "fact_order_item",
+    "dim_shop",
+    "fact_order",
+    "dim_date",
+    "fact_traffic",
+    "dim_customer",
+    "dim_product",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status",
+    "dim_date.full_date",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "净销售额"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) - COALESCE(SUM(t2.refund_amount), 0) AS 净销售额\nFROM fact_order t1\nLEFT JOIN fact_refund t2 ON t1.date_id = t2.date_id AND t1.order_id = t2.order_id\nJOIN dim_date t3 ON t1.date_id = t3.date_id\nWHERE t1.order_status != '已取消'\n  AND t3.full_date >= '2025-01-01'\n  AND t3.full_date <= '2025-12-31';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.pay_amount) - COALESCE(SUM(t2.refund_amount), 0) AS 净销售额\nFROM fact_order t1\nLEFT JOIN fact_refund t2 ON t1.date_id = t2.date_id AND t1.order_id = t2.order_id\nJOIN dim_date t3 ON t1.date_id = t3.date_id\nWHERE t1.order_status != '已取消'\n  AND t3.full_date >= '2025-01-01'\n  AND t3.full_date <= '2025-12-31';",
+   "pred_rows": [
+    {
+     "净销售额": 52807909.26
+    }
+   ],
+   "latency_s": 9.0,
+   "llm_calls": 6,
+   "input_tokens": 10789,
+   "output_tokens": 216,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d01",
+   "question": "2025年第二季度的GMV是多少？",
+   "tags": [
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "2025年第二季度的GMV是多少？",
+    "GMV"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周二",
+    "dim_region.city_tier.二线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.quarter"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.quarter = 'Q2' AND t2.date_id >= 20250401 AND t2.date_id <= 20250630 AND t1.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.quarter = 'Q2' AND t2.date_id >= 20250401 AND t2.date_id <= 20250630 AND t1.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 15199933.82
+    }
+   ],
+   "latency_s": 6.97,
+   "llm_calls": 6,
+   "input_tokens": 10460,
+   "output_tokens": 177,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d02",
+   "question": "2025年6月有多少个有效订单？",
+   "tags": [
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "2025年6月有多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "GMV",
+    "连带率",
+    "实付金额",
+    "新客订单占比",
+    "好评率",
+    "平均评分",
+    "用券订单占比",
+    "退款率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT order_id) AS 订单数\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20250601\n  AND date_id <= 20250630;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT order_id) AS 订单数\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20250601\n  AND date_id <= 20250630;",
+   "pred_rows": [
+    {
+     "订单数": 5390
+    }
+   ],
+   "latency_s": 7.72,
+   "llm_calls": 6,
+   "input_tokens": 10595,
+   "output_tokens": 152,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d03",
+   "question": "2025年双11大促期间的GMV是多少？",
+   "tags": [
+    "time",
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年双11大促期间的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_date.holiday_name.618大促",
+    "dim_date.holiday_name.双11大促",
+    "dim_date.holiday_name.双12大促",
+    "dim_product.brand.奥迪双钻",
+    "dim_product.product_name.奥迪双钻玩具入门款",
+    "dim_product.product_name.奥迪双钻玩具限定款"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_product"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.holiday_name"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.holiday_name = '双11大促' AND t2.date_id >= 20250101 AND t2.date_id <= 20251231 AND t1.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nJOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t2.holiday_name = '双11大促' AND t2.date_id >= 20250101 AND t2.date_id <= 20251231 AND t1.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 5383446.49
+    }
+   ],
+   "latency_s": 8.01,
+   "llm_calls": 6,
+   "input_tokens": 10971,
+   "output_tokens": 201,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d04",
+   "question": "618大促期间的有效订单数，按年份分别是多少？",
+   "tags": [
+    "time",
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "年份",
+    "有效",
+    "618大促期间的有效订单数，按年份分别是多少？",
+    "订单数"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "连带率",
+    "客单价",
+    "下单客户数",
+    "好评率",
+    "平均评分",
+    "新客订单占比",
+    "GMV",
+    "实付金额",
+    "用券订单占比",
+    "退款率"
+   ],
+   "retrieved_values": [
+    "dim_date.holiday_name.618大促",
+    "dim_date.holiday_name.双11大促",
+    "dim_date.holiday_name.双12大促"
+   ],
+   "merged_tables": [
+    "dim_date",
+    "fact_traffic",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "dim_date.holiday_name",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.order_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT d.year AS 年份, COUNT(DISTINCT f.order_id) AS 有效订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.holiday_name = '618大促' AND f.order_status != '已取消'\nGROUP BY d.year\nORDER BY d.year;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.year AS 年份, COUNT(DISTINCT f.order_id) AS 有效订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.holiday_name = '618大促' AND f.order_status != '已取消'\nGROUP BY d.year\nORDER BY d.year;",
+   "pred_rows": [
+    {
+     "年份": 2024,
+     "有效订单数": 3620
+    },
+    {
+     "年份": 2025,
+     "有效订单数": 4421
+    }
+   ],
+   "latency_s": 7.7,
+   "llm_calls": 6,
+   "input_tokens": 10553,
+   "output_tokens": 179,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 2,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d05",
+   "question": "2025年周末的GMV占全年GMV的比例是多少？",
+   "tags": [
+    "time",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "比例",
+    "2025年周末的GMV占全年GMV的比例是多少？"
+   ],
+   "retrieved_metrics": [
+    "连带率",
+    "GMV",
+    "新客订单占比",
+    "用券订单占比",
+    "好评率",
+    "转化率",
+    "退款率",
+    "订单数",
+    "优惠率",
+    "下单客户数",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.is_weekend",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  SUM(CASE WHEN d.is_weekend = 1 THEN f.pay_amount ELSE 0 END) / SUM(f.pay_amount) AS `2025年周末的GMV占全年GMV的比例`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  SUM(CASE WHEN d.is_weekend = 1 THEN f.pay_amount ELSE 0 END) / SUM(f.pay_amount) AS `2025年周末的GMV占全年GMV的比例`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "2025年周末的GMV占全年GMV的比例": 0.300205
+    }
+   ],
+   "latency_s": 8.53,
+   "llm_calls": 6,
+   "input_tokens": 9174,
+   "output_tokens": 208,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d06",
+   "question": "上个月的GMV是多少？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "上个月的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率",
+    "连带率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(gross_amount) AS GMV\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20251201\n  AND date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(gross_amount) AS GMV\nFROM fact_order\nWHERE order_status != '已取消'\n  AND date_id >= 20251201\n  AND date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "GMV": 4405992.29
+    }
+   ],
+   "latency_s": 5.72,
+   "llm_calls": 6,
+   "input_tokens": 9827,
+   "output_tokens": 116,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d07",
+   "question": "今年每个季度的GMV分别是多少？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "季度",
+    "GMV",
+    "今年每个季度的GMV分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "dim_date",
+    "fact_traffic",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.year",
+    "dim_date.quarter",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT d.quarter AS 季度, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 AND f.order_status != '已取消'\nGROUP BY d.quarter\nORDER BY d.quarter;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.quarter AS 季度, SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 AND f.order_status != '已取消'\nGROUP BY d.quarter\nORDER BY d.quarter;",
+   "pred_rows": [
+    {
+     "季度": "Q1",
+     "GMV": 10167670.89
+    },
+    {
+     "季度": "Q2",
+     "GMV": 14880244.49
+    },
+    {
+     "季度": "Q3",
+     "GMV": 11363528.7
+    },
+    {
+     "季度": "Q4",
+     "GMV": 16396465.18
+    }
+   ],
+   "latency_s": 8.86,
+   "llm_calls": 6,
+   "input_tokens": 9667,
+   "output_tokens": 178,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d08",
+   "question": "去年全年有多少个有效订单？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "去年全年有多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "GMV",
+    "连带率",
+    "实付金额",
+    "新客订单占比",
+    "好评率",
+    "平均评分",
+    "用券订单占比",
+    "退款率",
+    "复购率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_date",
+    "dim_customer",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.year = 2024;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.year = 2024;",
+   "pred_rows": [
+    {
+     "订单数": 30016
+    }
+   ],
+   "latency_s": 9.06,
+   "llm_calls": 6,
+   "input_tokens": 10990,
+   "output_tokens": 152,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d09",
+   "question": "春节期间的有效订单数，按年份分别是多少？",
+   "tags": [
+    "time",
+    "filter_value",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "年份",
+    "有效",
+    "春节期间的有效订单数，按年份分别是多少？",
+    "订单数"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "连带率",
+    "退款率",
+    "新客订单占比",
+    "实付金额",
+    "好评率",
+    "平均评分",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_date.holiday_name.春节"
+   ],
+   "merged_tables": [
+    "dim_date",
+    "fact_traffic",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "dim_date.holiday_name",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "fact_order.order_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT d.year AS 年份, COUNT(DISTINCT f.order_id) AS 有效订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.holiday_name = '春节' AND f.order_status != '已取消'\nGROUP BY d.year\nORDER BY d.year;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.year AS 年份, COUNT(DISTINCT f.order_id) AS 有效订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.holiday_name = '春节' AND f.order_status != '已取消'\nGROUP BY d.year\nORDER BY d.year;",
+   "pred_rows": [
+    {
+     "年份": 2024,
+     "有效订单数": 306
+    },
+    {
+     "年份": 2025,
+     "有效订单数": 357
+    }
+   ],
+   "latency_s": 8.42,
+   "llm_calls": 6,
+   "input_tokens": 10523,
+   "output_tokens": 183,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 2,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d10",
+   "question": "2025年每个月的GMV是多少？",
+   "tags": [
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年每个月的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_traffic",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 AND f.order_status != '已取消'\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(f.pay_amount) AS GMV\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = 2025 AND f.order_status != '已取消'\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "pred_rows": [
+    {
+     "年": 2025,
+     "月": 1,
+     "GMV": 3434531.25
+    },
+    {
+     "年": 2025,
+     "月": 2,
+     "GMV": 3218425.16
+    },
+    {
+     "年": 2025,
+     "月": 3,
+     "GMV": 3514714.48
+    },
+    {
+     "年": 2025,
+     "月": 4,
+     "GMV": 3452482.05
+    },
+    {
+     "年": 2025,
+     "月": 5,
+     "GMV": 3560191.72
+    }
+   ],
+   "latency_s": 9.59,
+   "llm_calls": 6,
+   "input_tokens": 9202,
+   "output_tokens": 179,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 12,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d11",
+   "question": "上季度的GMV是多少？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "季度",
+    "GMV",
+    "上季度的GMV是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "dim_date.date_id",
+    "dim_date.quarter",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nINNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.quarter = 'Q3' AND t2.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.gross_amount) AS GMV\nFROM fact_order t1\nINNER JOIN dim_date t2 ON t1.date_id = t2.date_id\nWHERE t1.order_status != '已取消' AND t2.quarter = 'Q3' AND t2.year = 2025",
+   "pred_rows": [
+    {
+     "GMV": 11553586.35
+    }
+   ],
+   "latency_s": 7.93,
+   "llm_calls": 6,
+   "input_tokens": 10313,
+   "output_tokens": 155,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d12",
+   "question": "本季度有多少个有效订单？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "本季度",
+    "有效",
+    "本季度有多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "GMV",
+    "连带率",
+    "实付金额",
+    "新客订单占比",
+    "复购率",
+    "用券订单占比",
+    "平均评分",
+    "转化率",
+    "好评率",
+    "退款率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "fact_traffic",
+    "dim_customer",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.quarter",
+    "dim_date.date_id",
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.quarter = 'Q4';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消' AND dd.quarter = 'Q4';",
+   "pred_rows": [
+    {
+     "订单数": 20915
+    }
+   ],
+   "latency_s": 8.75,
+   "llm_calls": 6,
+   "input_tokens": 11572,
+   "output_tokens": 157,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d13",
+   "question": "2025年周末平均每天有多少个有效订单？",
+   "tags": [
+    "time",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "订单",
+    "有效",
+    "平均",
+    "2025年周末平均每天有多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "连带率",
+    "订单数",
+    "平均配送时长",
+    "客单价",
+    "新客订单占比",
+    "平均评分",
+    "下单客户数",
+    "好评率",
+    "GMV",
+    "实付金额",
+    "用券订单占比",
+    "复购率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_shop",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "dim_date.date_id",
+    "dim_date.is_weekend"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT AVG(order_count) AS `周末平均每天有效订单数`\nFROM (\n    SELECT d.date_id, COUNT(DISTINCT f.order_id) AS order_count\n    FROM fact_order f\n    INNER JOIN dim_date d ON f.date_id = d.date_id\n    WHERE f.order_status != '已取消'\n      AND d.is_weekend = 1\n      AND d.date_id >= 20250101\n      AND d.date_id <= 20251231\n    GROUP BY d.date_id\n) AS weekend_daily_orders",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT AVG(order_count) AS `周末平均每天有效订单数`\nFROM (\n    SELECT d.date_id, COUNT(DISTINCT f.order_id) AS order_count\n    FROM fact_order f\n    INNER JOIN dim_date d ON f.date_id = d.date_id\n    WHERE f.order_status != '已取消'\n      AND d.is_weekend = 1\n      AND d.date_id >= 20250101\n      AND d.date_id <= 20251231\n    GROUP BY d.date_id\n) AS weekend_daily_orders",
+   "pred_rows": [
+    {
+     "周末平均每天有效订单数": 105.875
+    }
+   ],
+   "latency_s": 10.57,
+   "llm_calls": 6,
+   "input_tokens": 11072,
+   "output_tokens": 233,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e01",
+   "question": "GMV最高的前5个省份是哪些？",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "最高",
+    "GMV",
+    "省份",
+    "GMV最高的前5个省份是哪些？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_customer.register_channel.H5商城",
+    "dim_channel.channel_name.H5商城",
+    "dim_coupon.coupon_name.无门槛5元券"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_region",
+    "fact_traffic",
+    "dim_customer",
+    "dim_channel",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_region"
+   ],
+   "final_columns": [
+    "fact_order.region_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount",
+    "dim_region.province",
+    "dim_region.region_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dr.province AS 省份,\n  SUM(fo.pay_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.province\nORDER BY GMV DESC\nLIMIT 5",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.province AS 省份,\n  SUM(fo.pay_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.province\nORDER BY GMV DESC\nLIMIT 5",
+   "pred_rows": [
+    {
+     "省份": "广东省",
+     "GMV": 14853391.38
+    },
+    {
+     "省份": "浙江省",
+     "GMV": 8217476.72
+    },
+    {
+     "省份": "江苏省",
+     "GMV": 6677613.76
+    },
+    {
+     "省份": "上海市",
+     "GMV": 5443496.64
+    },
+    {
+     "省份": "北京市",
+     "GMV": 5123233.82
+    }
+   ],
+   "latency_s": 9.47,
+   "llm_calls": 6,
+   "input_tokens": 8145,
+   "output_tokens": 151,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e02",
+   "question": "各渠道的GMV分别是多少，从高到低排列。",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "排列",
+    "渠道",
+    "各渠道的GMV分别是多少，从高到低排列。"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "GMV",
+    "订单数",
+    "转化率",
+    "下单客户数",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.gross_amount) AS GMV\nFROM \n  fact_order fo\nJOIN \n  dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE \n  fo.order_status != '已取消'\nGROUP BY \n  dc.channel_name\nORDER BY \n  GMV DESC;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.gross_amount) AS GMV\nFROM \n  fact_order fo\nJOIN \n  dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE \n  fo.order_status != '已取消'\nGROUP BY \n  dc.channel_name\nORDER BY \n  GMV DESC;",
+   "pred_rows": [
+    {
+     "渠道": "微信小程序",
+     "GMV": 30098580.42
+    },
+    {
+     "渠道": "自营App",
+     "GMV": 22918885.53
+    },
+    {
+     "渠道": "京东",
+     "GMV": 14924536.29
+    },
+    {
+     "渠道": "天猫",
+     "GMV": 13667483.01
+    },
+    {
+     "渠道": "抖音直播",
+     "GMV": 9452840.66
+    }
+   ],
+   "latency_s": 7.72,
+   "llm_calls": 6,
+   "input_tokens": 8374,
+   "output_tokens": 161,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e03",
+   "question": "销量最高的5个商品是什么？",
+   "tags": [
+    "ranking",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "最高",
+    "销量",
+    "销量最高的5个商品是什么？",
+    "商品"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "实付金额",
+    "净销售额",
+    "客单价",
+    "访客数",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "fact_refund.refund_reason.商品与描述不符",
+    "dim_customer.register_channel.H5商城",
+    "dim_channel.channel_name.H5商城",
+    "dim_coupon.coupon_name.无门槛5元券"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date",
+    "fact_order_item",
+    "fact_order",
+    "dim_coupon",
+    "fact_traffic",
+    "fact_refund",
+    "dim_customer"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.product_name",
+    "dim_product.product_id",
+    "fact_order_item.quantity",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dp.product_name AS 商品名称,\n  SUM(foi.quantity) AS 销量\nFROM \n  dim_product dp\n  INNER JOIN fact_order_item foi ON dp.product_id = foi.product_id\nGROUP BY \n  dp.product_id, dp.product_name\nORDER BY \n  销量 DESC\nLIMIT 5",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dp.product_name AS 商品名称,\n  SUM(foi.quantity) AS 销量\nFROM \n  dim_product dp\n  INNER JOIN fact_order_item foi ON dp.product_id = foi.product_id\nGROUP BY \n  dp.product_id, dp.product_name\nORDER BY \n  销量 DESC\nLIMIT 5",
+   "pred_rows": [
+    {
+     "商品名称": "良品铺子休闲零食旗舰款",
+     "销量": 3103.0
+    },
+    {
+     "商品名称": "飞鹤奶粉入门款",
+     "销量": 2670.0
+    },
+    {
+     "商品名称": "水星家纺旗舰款",
+     "销量": 2639.0
+    },
+    {
+     "商品名称": "雅诗兰黛面部护肤限定款",
+     "销量": 2507.0
+    },
+    {
+     "商品名称": "罗莱家纺限定款",
+     "销量": 2491.0
+    }
+   ],
+   "latency_s": 9.07,
+   "llm_calls": 6,
+   "input_tokens": 11489,
+   "output_tokens": 149,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e04",
+   "question": "销售额最高的三个品牌是什么？",
+   "tags": [
+    "ranking",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "最高",
+    "销售额最高的三个品牌是什么？",
+    "销售额",
+    "品牌"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "实付金额",
+    "订单数",
+    "净销售额",
+    "客单价",
+    "下单客户数",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周三",
+    "dim_product.brand.三只松鼠",
+    "dim_region.city_tier.三线及以下",
+    "dim_channel.channel_type.第三方平台",
+    "dim_product.product_name.三只松鼠休闲零食旗舰款",
+    "dim_product.product_name.三只松鼠休闲零食入门款"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "fact_order_item",
+    "fact_order",
+    "dim_channel",
+    "fact_traffic",
+    "fact_refund",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.brand",
+    "dim_product.product_id",
+    "fact_order_item.item_amount",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT brand, SUM(item_amount) AS 销售额\nFROM fact_order_item f\nJOIN dim_product d ON f.product_id = d.product_id\nGROUP BY brand\nORDER BY 销售额 DESC\nLIMIT 3",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT brand, SUM(item_amount) AS 销售额\nFROM fact_order_item f\nJOIN dim_product d ON f.product_id = d.product_id\nGROUP BY brand\nORDER BY 销售额 DESC\nLIMIT 3",
+   "pred_rows": [
+    {
+     "brand": "苹果",
+     "销售额": 25133628.76
+    },
+    {
+     "brand": "华为",
+     "销售额": 19683694.09
+    },
+    {
+     "brand": "美的",
+     "销售额": 6611684.95
+    }
+   ],
+   "latency_s": 8.13,
+   "llm_calls": 6,
+   "input_tokens": 10371,
+   "output_tokens": 126,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 3,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e05",
+   "question": "各一级品类的销售额占比分别是多少？",
+   "tags": [
+    "ranking",
+    "multi_join",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "品类",
+    "销售额",
+    "各一级品类的销售额占比分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "新客订单占比",
+    "用券订单占比",
+    "好评率",
+    "转化率",
+    "退款率",
+    "订单数",
+    "优惠率",
+    "实付金额",
+    "下单客户数",
+    "净销售额",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_date",
+    "fact_traffic",
+    "fact_order",
+    "dim_customer",
+    "fact_refund",
+    "fact_order_item",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.category_l1",
+    "dim_product.product_id",
+    "fact_order_item.item_amount",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dp.category_l1 AS 一级品类,\n  SUM(foi.item_amount) AS 销售额,\n  ROUND(SUM(foi.item_amount) / SUM(SUM(foi.item_amount)) OVER(), 4) AS 销售额占比\nFROM dim_product dp\nJOIN fact_order_item foi ON dp.product_id = foi.product_id\nGROUP BY dp.category_l1\nORDER BY 销售额 DESC;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dp.category_l1 AS 一级品类,\n  SUM(foi.item_amount) AS 销售额,\n  ROUND(SUM(foi.item_amount) / SUM(SUM(foi.item_amount)) OVER(), 4) AS 销售额占比\nFROM dim_product dp\nJOIN fact_order_item foi ON dp.product_id = foi.product_id\nGROUP BY dp.category_l1\nORDER BY 销售额 DESC;",
+   "pred_rows": [
+    {
+     "一级品类": "手机数码",
+     "销售额": 57553809.72,
+     "销售额占比": 0.5616
+    },
+    {
+     "一级品类": "家用电器",
+     "销售额": 17124328.77,
+     "销售额占比": 0.1671
+    },
+    {
+     "一级品类": "服饰鞋包",
+     "销售额": 7440124.42,
+     "销售额占比": 0.0726
+    },
+    {
+     "一级品类": "运动户外",
+     "销售额": 6863540.68,
+     "销售额占比": 0.067
+    },
+    {
+     "一级品类": "母婴用品",
+     "销售额": 4704843.66,
+     "销售额占比": 0.0459
+    }
+   ],
+   "latency_s": 10.37,
+   "llm_calls": 6,
+   "input_tokens": 12248,
+   "output_tokens": 195,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 8,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e06",
+   "question": "有效订单数最多的前10个城市是哪些？",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "城市",
+    "有效",
+    "有效订单数最多的前10个城市是哪些？"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "GMV",
+    "连带率",
+    "实付金额",
+    "新客订单占比",
+    "平均评分",
+    "平均配送时长",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_name.满100减10",
+    "dim_coupon.coupon_name.新人立减10元"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_region",
+    "dim_shop",
+    "dim_channel",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_region"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.region_id",
+    "dim_region.city",
+    "dim_region.region_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT \n  dr.city AS 城市,\n  COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.city\nORDER BY 有效订单数 DESC\nLIMIT 10",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.city AS 城市,\n  COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.city\nORDER BY 有效订单数 DESC\nLIMIT 10",
+   "pred_rows": [
+    {
+     "城市": "上海市",
+     "有效订单数": 3883
+    },
+    {
+     "城市": "深圳市",
+     "有效订单数": 3731
+    },
+    {
+     "城市": "北京市",
+     "有效订单数": 3647
+    },
+    {
+     "城市": "广州市",
+     "有效订单数": 3409
+    },
+    {
+     "城市": "武汉市",
+     "有效订单数": 2728
+    }
+   ],
+   "latency_s": 8.86,
+   "llm_calls": 6,
+   "input_tokens": 11703,
+   "output_tokens": 167,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 10,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e07",
+   "question": "GMV最高的店铺是哪家？",
+   "tags": [
+    "ranking",
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "最高",
+    "GMV",
+    "店铺",
+    "GMV最高的店铺是哪家？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "转化率",
+    "实付金额"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_product",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_shop.shop_name",
+    "dim_shop.shop_id",
+    "fact_order.shop_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT ds.shop_name\nFROM dim_shop ds\nJOIN fact_order fo ON ds.shop_id = fo.shop_id\nWHERE fo.order_status != '已取消'\nGROUP BY ds.shop_name\nORDER BY SUM(fo.gross_amount) DESC\nLIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT ds.shop_name\nFROM dim_shop ds\nJOIN fact_order fo ON ds.shop_id = fo.shop_id\nWHERE fo.order_status != '已取消'\nGROUP BY ds.shop_name\nORDER BY SUM(fo.gross_amount) DESC\nLIMIT 1",
+   "pred_rows": [
+    {
+     "shop_name": "百汇数码自营店"
+    }
+   ],
+   "latency_s": 8.67,
+   "llm_calls": 6,
+   "input_tokens": 7985,
+   "output_tokens": 150,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e08",
+   "question": "各会员等级的客单价分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "各会员等级的客单价分别是多少？",
+    "单价",
+    "会员"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "订单数",
+    "连带率",
+    "平均评分",
+    "下单客户数",
+    "GMV",
+    "实付金额",
+    "新客订单占比",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_customer.member_level.银牌会员",
+    "dim_customer.member_level.金牌会员",
+    "dim_customer.member_level.普通会员",
+    "dim_customer.member_level.钻石会员"
+   ],
+   "merged_tables": [
+    "dim_customer",
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_shop",
+    "dim_channel",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_customer",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_customer.member_level",
+    "dim_customer.customer_id",
+    "fact_order.pay_amount",
+    "fact_order.customer_id",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(fo.pay_amount) / COUNT(*) AS 客单价\nFROM \n  fact_order fo\nJOIN \n  dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE \n  fo.order_status != '已取消'\nGROUP BY \n  dc.member_level;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(fo.pay_amount) / COUNT(*) AS 客单价\nFROM \n  fact_order fo\nJOIN \n  dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE \n  fo.order_status != '已取消'\nGROUP BY \n  dc.member_level;",
+   "pred_rows": [
+    {
+     "会员等级": "金牌会员",
+     "客单价": 1409.236815
+    },
+    {
+     "会员等级": "银牌会员",
+     "客单价": 1460.30189
+    },
+    {
+     "会员等级": "钻石会员",
+     "客单价": 1441.092816
+    },
+    {
+     "会员等级": "普通会员",
+     "客单价": 1419.970329
+    }
+   ],
+   "latency_s": 9.76,
+   "llm_calls": 6,
+   "input_tokens": 10221,
+   "output_tokens": 174,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e09",
+   "question": "各大区的有效订单数分别是多少？",
+   "tags": [
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "大区",
+    "有效",
+    "各大区的有效订单数分别是多少？",
+    "订单数"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "下单客户数",
+    "GMV",
+    "客单价",
+    "连带率",
+    "退款率",
+    "新客订单占比",
+    "实付金额",
+    "好评率",
+    "平均评分",
+    "用券订单占比",
+    "复购率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_region",
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic",
+    "dim_product"
+   ],
+   "final_tables": [
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_region.region_name",
+    "dim_region.region_id",
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.region_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT \n  dr.region_name AS 大区,\n  COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.region_name;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.region_name AS 大区,\n  COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.region_name;",
+   "pred_rows": [
+    {
+     "大区": "东北",
+     "有效订单数": 5446
+    },
+    {
+     "大区": "华东",
+     "有效订单数": 21180
+    },
+    {
+     "大区": "华中",
+     "有效订单数": 8792
+    },
+    {
+     "大区": "华北",
+     "有效订单数": 9156
+    },
+    {
+     "大区": "华南",
+     "有效订单数": 11874
+    }
+   ],
+   "latency_s": 8.34,
+   "llm_calls": 6,
+   "input_tokens": 10679,
+   "output_tokens": 160,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 7,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e10",
+   "question": "退款最多的原因是什么？",
+   "tags": [
+    "ranking"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "最多",
+    "退款",
+    "退款最多的原因是什么？",
+    "原因"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "净销售额",
+    "实付金额",
+    "复购率",
+    "优惠率",
+    "用券订单占比",
+    "好评率",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款"
+   ],
+   "merged_tables": [
+    "fact_refund",
+    "fact_order",
+    "dim_coupon",
+    "fact_order_item",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_refund"
+   ],
+   "final_columns": [
+    "fact_refund.refund_reason"
+   ],
+   "selected_metrics": [],
+   "first_sql": "SELECT refund_reason AS 退款原因\nFROM fact_refund\nGROUP BY refund_reason\nORDER BY COUNT(*) DESC\nLIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT refund_reason AS 退款原因\nFROM fact_refund\nGROUP BY refund_reason\nORDER BY COUNT(*) DESC\nLIMIT 1",
+   "pred_rows": [
+    {
+     "退款原因": "质量问题"
+    }
+   ],
+   "latency_s": 7.02,
+   "llm_calls": 6,
+   "input_tokens": 8260,
+   "output_tokens": 95,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "e11",
+   "question": "销量最高的5个二级品类是什么？",
+   "tags": [
+    "ranking",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "品类",
+    "最高",
+    "销量",
+    "销量最高的5个二级品类是什么？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "实付金额",
+    "净销售额",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周二",
+    "dim_region.city_tier.二线",
+    "dim_customer.register_channel.H5商城",
+    "dim_channel.channel_name.H5商城",
+    "dim_coupon.coupon_name.无门槛5元券"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "fact_order",
+    "fact_order_item",
+    "fact_traffic",
+    "dim_coupon",
+    "fact_refund",
+    "dim_date",
+    "dim_region",
+    "dim_customer"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.category_l2",
+    "dim_product.product_id",
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order_item.quantity",
+    "fact_order_item.order_id",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT dp.category_l2 AS `二级品类`, SUM(foi.quantity) AS `销量`\nFROM fact_order_item foi\nJOIN fact_order fo ON foi.order_id = fo.order_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE fo.order_status != '已取消'\nGROUP BY dp.category_l2\nORDER BY `销量` DESC\nLIMIT 5",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT dp.category_l2 AS `二级品类`, SUM(foi.quantity) AS `销量`\nFROM fact_order_item foi\nJOIN fact_order fo ON foi.order_id = fo.order_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE fo.order_status != '已取消'\nGROUP BY dp.category_l2\nORDER BY `销量` DESC\nLIMIT 5",
+   "pred_rows": [
+    {
+     "二级品类": "休闲零食",
+     "销量": 12176.0
+    },
+    {
+     "二级品类": "家纺",
+     "销量": 11527.0
+    },
+    {
+     "二级品类": "收纳清洁",
+     "销量": 10062.0
+    },
+    {
+     "二级品类": "厨房电器",
+     "销量": 8757.0
+    },
+    {
+     "二级品类": "面部护肤",
+     "销量": 8610.0
+    }
+   ],
+   "latency_s": 9.67,
+   "llm_calls": 6,
+   "input_tokens": 12170,
+   "output_tokens": 178,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f01",
+   "question": "2025年各渠道的转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "2025年各渠道的转化率分别是多少？",
+    "转化率"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "复购率",
+    "退款率",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_traffic",
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_traffic.channel_id",
+    "fact_traffic.date_id",
+    "fact_traffic.visitors",
+    "fact_order.channel_id",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.year"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  dc.channel_name AS 渠道,\n  COALESCE(SUM(fo.order_count), 0) / NULLIF(SUM(ft.visitors), 0) AS 转化率\nFROM dim_channel dc\nLEFT JOIN (\n  SELECT \n    channel_id,\n    COUNT(*) AS order_count\n  FROM fact_order\n  WHERE date_id >= 20250101 AND date_id <= 20251231\n    AND order_status != '已取消'\n  GROUP BY channel_id\n) fo ON dc.channel_id = fo.channel_id\nLEFT JOIN (\n  SELECT \n    channel_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 AND date_id <= 20251231\n  GROUP BY channel_id\n) ft ON dc.channel_id = ft.channel_id\nGROUP BY dc.channel_id, dc.channel_name\nORDER BY dc.channel_name;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.channel_name AS 渠道,\n  COALESCE(SUM(fo.order_count), 0) / NULLIF(SUM(ft.visitors), 0) AS 转化率\nFROM dim_channel dc\nLEFT JOIN (\n  SELECT \n    channel_id,\n    COUNT(*) AS order_count\n  FROM fact_order\n  WHERE date_id >= 20250101 AND date_id <= 20251231\n    AND order_status != '已取消'\n  GROUP BY channel_id\n) fo ON dc.channel_id = fo.channel_id\nLEFT JOIN (\n  SELECT \n    channel_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 AND date_id <= 20251231\n  GROUP BY channel_id\n) ft ON dc.channel_id = ft.channel_id\nGROUP BY dc.channel_id, dc.channel_name\nORDER BY dc.channel_name;",
+   "pred_rows": [
+    {
+     "渠道": "H5商城",
+     "转化率": 0.025
+    },
+    {
+     "渠道": "京东",
+     "转化率": 0.0355
+    },
+    {
+     "渠道": "天猫",
+     "转化率": 0.0325
+    },
+    {
+     "渠道": "微信小程序",
+     "转化率": 0.0457
+    },
+    {
+     "渠道": "抖音直播",
+     "转化率": 0.0194
+    }
+   ],
+   "latency_s": 11.87,
+   "llm_calls": 6,
+   "input_tokens": 9885,
+   "output_tokens": 354,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f02",
+   "question": "2025年各店铺类型的转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "店铺",
+    "类型",
+    "2025年各店铺类型的转化率分别是多少？",
+    "转化率"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "复购率",
+    "退款率",
+    "GMV"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_shop",
+    "dim_channel",
+    "dim_product",
+    "fact_traffic",
+    "fact_order",
+    "dim_coupon",
+    "dim_date",
+    "dim_region",
+    "dim_customer",
+    "fact_order_item",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_shop.shop_type",
+    "dim_shop.shop_id",
+    "fact_traffic.shop_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "fact_order.shop_id",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  ds.shop_type AS 店铺类型,\n  SUM(fo.order_count) / SUM(ft.visitors) AS 转化率\nFROM dim_shop ds\nINNER JOIN (\n  SELECT \n    shop_id,\n    COUNT(*) AS order_count\n  FROM fact_order\n  WHERE order_status != '已取消' \n    AND date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) fo ON ds.shop_id = fo.shop_id\nINNER JOIN (\n  SELECT \n    shop_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) ft ON ds.shop_id = ft.shop_id\nGROUP BY ds.shop_type;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  ds.shop_type AS 店铺类型,\n  SUM(fo.order_count) / SUM(ft.visitors) AS 转化率\nFROM dim_shop ds\nINNER JOIN (\n  SELECT \n    shop_id,\n    COUNT(*) AS order_count\n  FROM fact_order\n  WHERE order_status != '已取消' \n    AND date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) fo ON ds.shop_id = fo.shop_id\nINNER JOIN (\n  SELECT \n    shop_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) ft ON ds.shop_id = ft.shop_id\nGROUP BY ds.shop_type;",
+   "pred_rows": [
+    {
+     "店铺类型": "旗舰店",
+     "转化率": 0.0368
+    },
+    {
+     "店铺类型": "专营店",
+     "转化率": 0.0342
+    },
+    {
+     "店铺类型": "自营店",
+     "转化率": 0.0375
+    }
+   ],
+   "latency_s": 11.56,
+   "llm_calls": 6,
+   "input_tokens": 11684,
+   "output_tokens": 334,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 3,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f03",
+   "question": "2025年的加购率是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "加购",
+    "2025年的加购率是多少？"
+   ],
+   "retrieved_metrics": [
+    "加购率",
+    "复购率",
+    "下单客户数",
+    "转化率",
+    "新客订单占比"
+   ],
+   "retrieved_values": [
+    "dim_shop.shop_name.爱购服饰自营店",
+    "dim_shop.shop_name.爱购生鲜专营店",
+    "dim_shop.shop_name.爱购母婴旗舰店"
+   ],
+   "merged_tables": [
+    "fact_traffic",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_date",
+    "fact_order"
+   ],
+   "final_tables": [
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_traffic.cart_users",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "加购率"
+   ],
+   "first_sql": "SELECT SUM(t.cart_users) / SUM(t.visitors) AS 加购率\nFROM fact_traffic t\nJOIN dim_date d ON t.date_id = d.date_id\nWHERE d.year = 2025",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t.cart_users) / SUM(t.visitors) AS 加购率\nFROM fact_traffic t\nJOIN dim_date d ON t.date_id = d.date_id\nWHERE d.year = 2025",
+   "pred_rows": [
+    {
+     "加购率": 0.0923
+    }
+   ],
+   "latency_s": 6.89,
+   "llm_calls": 6,
+   "input_tokens": 8074,
+   "output_tokens": 146,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f04",
+   "question": "2025年各渠道的加购率分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "加购",
+    "渠道",
+    "2025年各渠道的加购率分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "加购率",
+    "复购率",
+    "下单客户数",
+    "转化率",
+    "新客订单占比"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道",
+    "dim_shop.shop_name.爱购服饰自营店",
+    "dim_shop.shop_name.爱购生鲜专营店",
+    "dim_shop.shop_name.爱购母婴旗舰店"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "fact_order_item",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_traffic.channel_id",
+    "fact_traffic.cart_users",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "加购率"
+   ],
+   "first_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(ft.cart_users) / SUM(ft.visitors) AS 加购率\nFROM fact_traffic ft\nJOIN dim_channel dc ON ft.channel_id = dc.channel_id\nJOIN dim_date dd ON ft.date_id = dd.date_id\nWHERE dd.year = 2025\nGROUP BY dc.channel_name;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(ft.cart_users) / SUM(ft.visitors) AS 加购率\nFROM fact_traffic ft\nJOIN dim_channel dc ON ft.channel_id = dc.channel_id\nJOIN dim_date dd ON ft.date_id = dd.date_id\nWHERE dd.year = 2025\nGROUP BY dc.channel_name;",
+   "pred_rows": [
+    {
+     "渠道": "微信小程序",
+     "加购率": 0.0911
+    },
+    {
+     "渠道": "京东",
+     "加购率": 0.0952
+    },
+    {
+     "渠道": "抖音直播",
+     "加购率": 0.0945
+    },
+    {
+     "渠道": "自营App",
+     "加购率": 0.09
+    },
+    {
+     "渠道": "H5商城",
+     "加购率": 0.0829
+    }
+   ],
+   "latency_s": 9.23,
+   "llm_calls": 6,
+   "input_tokens": 9674,
+   "output_tokens": 202,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f05",
+   "question": "2025年每个月的净销售额分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "销售额",
+    "2025年每个月的净销售额分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "净销售额",
+    "实付金额",
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_channel",
+    "fact_order_item",
+    "dim_shop",
+    "fact_order",
+    "dim_product",
+    "fact_traffic",
+    "dim_date",
+    "dim_customer",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "dim_date.full_date",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "净销售额"
+   ],
+   "first_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(f.pay_amount) - COALESCE(SUM(r.refund_amount), 0) AS 净销售额\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nLEFT JOIN fact_refund r ON f.date_id = r.date_id AND f.order_id = r.order_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消'\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(f.pay_amount) - COALESCE(SUM(r.refund_amount), 0) AS 净销售额\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nLEFT JOIN fact_refund r ON f.date_id = r.date_id AND f.order_id = r.order_id\nWHERE d.year = 2025 \n  AND f.order_status != '已取消'\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "pred_rows": [
+    {
+     "年": 2025,
+     "月": 1,
+     "净销售额": 3434531.25
+    },
+    {
+     "年": 2025,
+     "月": 2,
+     "净销售额": 3218425.16
+    },
+    {
+     "年": 2025,
+     "月": 3,
+     "净销售额": 3514714.48
+    },
+    {
+     "年": 2025,
+     "月": 4,
+     "净销售额": 3452482.05
+    },
+    {
+     "年": 2025,
+     "月": 5,
+     "净销售额": 3560191.72
+    }
+   ],
+   "latency_s": 8.91,
+   "llm_calls": 6,
+   "input_tokens": 10566,
+   "output_tokens": 210,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 12,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f06",
+   "question": "2025年各渠道的净销售额分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "销售额",
+    "2025年各渠道的净销售额分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "净销售额",
+    "实付金额",
+    "访客数",
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "fact_order_item",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "净销售额"
+   ],
+   "first_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.pay_amount) - COALESCE(SUM(fr.refund_amount), 0) AS 净销售额\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nLEFT JOIN fact_refund fr ON fo.date_id = fr.date_id AND fo.channel_id = fr.channel_id AND fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231\nGROUP BY dc.channel_name;",
+   "validate_error": "(asyncmy.errors.OperationalError) (1054, \"Unknown column 'fr.channel_id' in 'on clause'\")\n[SQL: explain SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.pay_amount) - COALESCE(SUM(fr.refund_amount), 0) AS 净销售额\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nLEFT JOIN fact_refund fr ON fo.date_id = fr.date_id AND fo.channel_id = fr.channel_id AND fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231\nGROUP BY dc.channel_name;]\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+   "corrected_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.pay_amount) - COALESCE(SUM(fr.refund_amount), 0) AS 净销售额\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nLEFT JOIN fact_refund fr ON fo.date_id = fr.date_id AND fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231\nGROUP BY dc.channel_name;",
+   "final_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.pay_amount) - COALESCE(SUM(fr.refund_amount), 0) AS 净销售额\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nLEFT JOIN fact_refund fr ON fo.date_id = fr.date_id AND fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\n  AND dd.date_id >= 20250101\n  AND dd.date_id <= 20251231\nGROUP BY dc.channel_name;",
+   "pred_rows": [
+    {
+     "渠道": "京东",
+     "净销售额": 8144439.69
+    },
+    {
+     "渠道": "微信小程序",
+     "净销售额": 16268741.12
+    },
+    {
+     "渠道": "自营App",
+     "净销售额": 12579275.8
+    },
+    {
+     "渠道": "天猫",
+     "净销售额": 7389579.66
+    },
+    {
+     "渠道": "H5商城",
+     "净销售额": 3489337.28
+    }
+   ],
+   "latency_s": 15.0,
+   "llm_calls": 7,
+   "input_tokens": 13470,
+   "output_tokens": 394,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f07",
+   "question": "2025年发生的退款，各退款原因的退款金额分别是多少？",
+   "tags": [
+    "cross_fact",
+    "time"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "2025年发生的退款，各退款原因的退款金额分别是多少？",
+    "原因",
+    "金额",
+    "发生",
+    "退款"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "实付金额",
+    "净销售额",
+    "GMV",
+    "客单价",
+    "复购率",
+    "优惠率",
+    "用券订单占比",
+    "好评率",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款"
+   ],
+   "merged_tables": [
+    "fact_refund",
+    "fact_order",
+    "dim_coupon",
+    "fact_order_item",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_refund",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_refund.refund_amount",
+    "fact_refund.refund_reason",
+    "fact_refund.date_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "实付金额"
+   ],
+   "first_sql": "SELECT \n  fr.refund_reason AS 退款原因,\n  SUM(fr.refund_amount) AS 退款金额\nFROM \n  fact_refund fr\n  INNER JOIN dim_date dd ON fr.date_id = dd.date_id\nWHERE \n  dd.date_id >= 20250101 AND dd.date_id <= 20251231\nGROUP BY \n  fr.refund_reason;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  fr.refund_reason AS 退款原因,\n  SUM(fr.refund_amount) AS 退款金额\nFROM \n  fact_refund fr\n  INNER JOIN dim_date dd ON fr.date_id = dd.date_id\nWHERE \n  dd.date_id >= 20250101 AND dd.date_id <= 20251231\nGROUP BY \n  fr.refund_reason;",
+   "pred_rows": [
+    {
+     "退款原因": "拍错或多拍",
+     "退款金额": 192174.84
+    },
+    {
+     "退款原因": "商品与描述不符",
+     "退款金额": 407365.19
+    },
+    {
+     "退款原因": "不想要了",
+     "退款金额": 602629.72
+    },
+    {
+     "退款原因": "质量问题",
+     "退款金额": 453841.04
+    },
+    {
+     "退款原因": "尺码不合适",
+     "退款金额": 167907.59
+    }
+   ],
+   "latency_s": 10.28,
+   "llm_calls": 6,
+   "input_tokens": 10186,
+   "output_tokens": 193,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f08",
+   "question": "2025年双11大促期间各渠道的转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "filter_value",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "2025年双11大促期间各渠道的转化率分别是多少？",
+    "转化率"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "复购率",
+    "退款率",
+    "访客数",
+    "用券订单占比",
+    "优惠率"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道",
+    "dim_date.holiday_name.618大促",
+    "dim_date.holiday_name.双11大促",
+    "dim_date.holiday_name.双12大促",
+    "dim_product.brand.奥迪双钻",
+    "dim_product.product_name.奥迪双钻玩具入门款",
+    "dim_product.product_name.奥迪双钻玩具限定款"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_traffic",
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_channel.channel_name",
+    "dim_channel.channel_id",
+    "fact_traffic.channel_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "fact_order.channel_id",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "dim_date.holiday_name",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.order_count) / SUM(ft.visitors) AS 转化率\nFROM dim_channel dc\nINNER JOIN (\n  SELECT \n    channel_id,\n    COUNT(*) AS order_count\n  FROM fact_order fo\n  INNER JOIN dim_date dd ON fo.date_id = dd.date_id\n  WHERE dd.holiday_name = '双11大促' \n    AND fo.order_status != '已取消'\n  GROUP BY channel_id\n) fo ON dc.channel_id = fo.channel_id\nINNER JOIN (\n  SELECT \n    channel_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic ft\n  INNER JOIN dim_date dd ON ft.date_id = dd.date_id\n  WHERE dd.holiday_name = '双11大促'\n  GROUP BY channel_id\n) ft ON dc.channel_id = ft.channel_id\nGROUP BY dc.channel_name;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.channel_name AS 渠道,\n  SUM(fo.order_count) / SUM(ft.visitors) AS 转化率\nFROM dim_channel dc\nINNER JOIN (\n  SELECT \n    channel_id,\n    COUNT(*) AS order_count\n  FROM fact_order fo\n  INNER JOIN dim_date dd ON fo.date_id = dd.date_id\n  WHERE dd.holiday_name = '双11大促' \n    AND fo.order_status != '已取消'\n  GROUP BY channel_id\n) fo ON dc.channel_id = fo.channel_id\nINNER JOIN (\n  SELECT \n    channel_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic ft\n  INNER JOIN dim_date dd ON ft.date_id = dd.date_id\n  WHERE dd.holiday_name = '双11大促'\n  GROUP BY channel_id\n) ft ON dc.channel_id = ft.channel_id\nGROUP BY dc.channel_name;",
+   "pred_rows": [
+    {
+     "渠道": "微信小程序",
+     "转化率": 0.0548
+    },
+    {
+     "渠道": "自营App",
+     "转化率": 0.0607
+    },
+    {
+     "渠道": "H5商城",
+     "转化率": 0.0297
+    },
+    {
+     "渠道": "天猫",
+     "转化率": 0.0385
+    },
+    {
+     "渠道": "京东",
+     "转化率": 0.0421
+    }
+   ],
+   "latency_s": 13.86,
+   "llm_calls": 6,
+   "input_tokens": 10156,
+   "output_tokens": 362,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 6,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f09",
+   "question": "2025年每个月的转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "2025年每个月的转化率分别是多少？",
+    "转化率"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "退款率",
+    "订单数",
+    "用券订单占比",
+    "好评率",
+    "连带率",
+    "优惠率",
+    "新客订单占比",
+    "复购率",
+    "GMV"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "dim_customer",
+    "fact_order",
+    "dim_channel",
+    "fact_traffic",
+    "fact_order_item"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_columns": [
+    "dim_date.month",
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  d.month AS 月,\n  SUM(CASE WHEN o.order_status != '已取消' THEN 1 ELSE 0 END) / NULLIF(SUM(t.visitors), 0) AS 转化率\nFROM dim_date d\nINNER JOIN fact_traffic t ON d.date_id = t.date_id\nINNER JOIN fact_order o ON d.date_id = o.date_id\nWHERE d.year = 2025\nGROUP BY d.month\nORDER BY d.month;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  d.month AS 月,\n  SUM(CASE WHEN o.order_status != '已取消' THEN 1 ELSE 0 END) / NULLIF(SUM(t.visitors), 0) AS 转化率\nFROM dim_date d\nINNER JOIN fact_traffic t ON d.date_id = t.date_id\nINNER JOIN fact_order o ON d.date_id = o.date_id\nWHERE d.year = 2025\nGROUP BY d.month\nORDER BY d.month;",
+   "pred_rows": [
+    {
+     "月": 1,
+     "转化率": 0.0279
+    },
+    {
+     "月": 2,
+     "转化率": 0.0313
+    },
+    {
+     "月": 3,
+     "转化率": 0.0298
+    },
+    {
+     "月": 4,
+     "转化率": 0.0292
+    },
+    {
+     "月": 5,
+     "转化率": 0.0286
+    }
+   ],
+   "latency_s": 9.76,
+   "llm_calls": 6,
+   "input_tokens": 9327,
+   "output_tokens": 227,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 12,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f10",
+   "question": "2025年访客数最多的5家店铺是哪些？",
+   "tags": [
+    "ranking",
+    "time"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "店铺",
+    "访客",
+    "2025年访客数最多的5家店铺是哪些？"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "下单客户数",
+    "转化率",
+    "加购率"
+   ],
+   "retrieved_values": [
+    "dim_product.category_l2.家纺",
+    "dim_customer.register_channel.H5商城",
+    "dim_channel.channel_name.H5商城",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_product.product_name.水星家纺限定款",
+    "dim_product.product_name.水星家纺旗舰款",
+    "dim_product.product_name.罗莱家纺旗舰款",
+    "dim_product.product_name.罗莱家纺入门款",
+    "dim_product.product_name.罗莱家纺限定款",
+    "dim_product.product_name.富安娜家纺旗舰款",
+    "dim_product.product_name.富安娜家纺限定款"
+   ],
+   "merged_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_product",
+    "dim_channel",
+    "dim_date",
+    "dim_customer",
+    "fact_refund",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_shop.shop_name",
+    "dim_shop.shop_id",
+    "fact_traffic.shop_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "访客数"
+   ],
+   "first_sql": "SELECT \n  ds.shop_name AS 店铺名称,\n  SUM(ft.visitors) AS 访客数\nFROM fact_traffic ft\nJOIN dim_shop ds ON ft.shop_id = ds.shop_id\nJOIN dim_date dd ON ft.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231\nGROUP BY ds.shop_name\nORDER BY 访客数 DESC\nLIMIT 5",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  ds.shop_name AS 店铺名称,\n  SUM(ft.visitors) AS 访客数\nFROM fact_traffic ft\nJOIN dim_shop ds ON ft.shop_id = ds.shop_id\nJOIN dim_date dd ON ft.date_id = dd.date_id\nWHERE dd.date_id >= 20250101 AND dd.date_id <= 20251231\nGROUP BY ds.shop_name\nORDER BY 访客数 DESC\nLIMIT 5",
+   "pred_rows": [
+    {
+     "店铺名称": "爱购母婴旗舰店",
+     "访客数": 60289.0
+    },
+    {
+     "店铺名称": "领航美妆自营店",
+     "访客数": 59354.0
+    },
+    {
+     "店铺名称": "星选服饰旗舰店",
+     "访客数": 58597.0
+    },
+    {
+     "店铺名称": "悦享数码旗舰店",
+     "访客数": 57098.0
+    },
+    {
+     "店铺名称": "臻品家居自营店",
+     "访客数": 54902.0
+    }
+   ],
+   "latency_s": 10.89,
+   "llm_calls": 6,
+   "input_tokens": 10002,
+   "output_tokens": 214,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f11",
+   "question": "2025年各主营品类的店铺转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "品类",
+    "店铺",
+    "2025年各主营品类的店铺转化率分别是多少？",
+    "转化率"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "退款率",
+    "复购率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_product",
+    "dim_channel",
+    "fact_order_item",
+    "fact_refund",
+    "dim_date"
+   ],
+   "final_tables": [
+    "dim_shop",
+    "fact_order",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_columns": [
+    "dim_shop.shop_id",
+    "dim_shop.main_category",
+    "fact_order.shop_id",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_traffic.shop_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id",
+    "dim_date.year",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  ds.main_category AS 主营品类,\n  SUM(fo.order_cnt) / SUM(ft.visitors) AS 转化率\nFROM dim_shop ds\nINNER JOIN (\n  SELECT \n    shop_id,\n    COUNT(*) AS order_cnt\n  FROM fact_order\n  WHERE order_status != '已取消'\n    AND date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) fo ON ds.shop_id = fo.shop_id\nINNER JOIN (\n  SELECT \n    shop_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) ft ON ds.shop_id = ft.shop_id\nGROUP BY ds.main_category;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  ds.main_category AS 主营品类,\n  SUM(fo.order_cnt) / SUM(ft.visitors) AS 转化率\nFROM dim_shop ds\nINNER JOIN (\n  SELECT \n    shop_id,\n    COUNT(*) AS order_cnt\n  FROM fact_order\n  WHERE order_status != '已取消'\n    AND date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) fo ON ds.shop_id = fo.shop_id\nINNER JOIN (\n  SELECT \n    shop_id,\n    SUM(visitors) AS visitors\n  FROM fact_traffic\n  WHERE date_id >= 20250101 \n    AND date_id <= 20251231\n  GROUP BY shop_id\n) ft ON ds.shop_id = ft.shop_id\nGROUP BY ds.main_category;",
+   "pred_rows": [
+    {
+     "主营品类": "手机数码",
+     "转化率": 0.0368
+    },
+    {
+     "主营品类": "家用电器",
+     "转化率": 0.0356
+    },
+    {
+     "主营品类": "美妆护肤",
+     "转化率": 0.0391
+    },
+    {
+     "主营品类": "服饰鞋包",
+     "转化率": 0.0348
+    },
+    {
+     "主营品类": "食品生鲜",
+     "转化率": 0.0313
+    }
+   ],
+   "latency_s": 13.56,
+   "llm_calls": 6,
+   "input_tokens": 10643,
+   "output_tokens": 338,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 8,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g01",
+   "question": "各会员等级的客户购买手机数码品类的销售额分别是多少？",
+   "tags": [
+    "multi_join",
+    "filter_value"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "手机",
+    "客户",
+    "数码",
+    "品类",
+    "购买",
+    "销售额",
+    "会员",
+    "各会员等级的客户购买手机数码品类的销售额分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "实付金额",
+    "客单价",
+    "净销售额",
+    "平均评分",
+    "下单客户数",
+    "访客数",
+    "订单数"
+   ],
+   "retrieved_values": [
+    "dim_customer.member_level.银牌会员",
+    "dim_customer.member_level.金牌会员",
+    "dim_customer.member_level.普通会员",
+    "dim_customer.member_level.钻石会员",
+    "dim_product.category_l2.手机",
+    "dim_shop.main_category.手机数码",
+    "dim_product.category_l1.手机数码",
+    "dim_product.product_name.苹果手机入门款",
+    "dim_product.product_name.苹果手机标准款",
+    "dim_product.product_name.苹果手机旗舰款",
+    "dim_product.product_name.华为手机限定款",
+    "dim_product.product_name.华为手机旗舰款",
+    "dim_product.product_name.华为手机入门款",
+    "dim_product.product_name.小米手机旗舰款",
+    "dim_product.product_name.小米手机入门款",
+    "dim_product.product_name.OPPO手机入门款",
+    "dim_product.product_name.OPPO手机旗舰款",
+    "dim_shop.shop_name.百汇数码自营店",
+    "dim_shop.shop_name.悦享数码旗舰店",
+    "dim_shop.shop_name.臻品数码专营店"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_customer",
+    "dim_product",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_date"
+   ],
+   "final_tables": [
+    "fact_order",
+    "fact_order_item",
+    "dim_customer",
+    "dim_product"
+   ],
+   "final_columns": [
+    "fact_order.customer_id",
+    "fact_order.order_id",
+    "fact_order.order_status",
+    "fact_order_item.item_amount",
+    "fact_order_item.order_id",
+    "fact_order_item.product_id",
+    "dim_customer.member_level",
+    "dim_customer.customer_id",
+    "dim_product.category_l1",
+    "dim_product.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(foi.item_amount) AS 销售额\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE fo.order_status != '已取消'\n  AND dp.category_l1 = '手机数码'\nGROUP BY dc.member_level;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dc.member_level AS 会员等级,\n  SUM(foi.item_amount) AS 销售额\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE fo.order_status != '已取消'\n  AND dp.category_l1 = '手机数码'\nGROUP BY dc.member_level;",
+   "pred_rows": [
+    {
+     "会员等级": "金牌会员",
+     "销售额": 12942104.17
+    },
+    {
+     "会员等级": "钻石会员",
+     "销售额": 20896684.15
+    },
+    {
+     "会员等级": "银牌会员",
+     "销售额": 17015938.56
+    },
+    {
+     "会员等级": "普通会员",
+     "销售额": 4082215.56
+    }
+   ],
+   "latency_s": 12.71,
+   "llm_calls": 6,
+   "input_tokens": 13315,
+   "output_tokens": 248,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g02",
+   "question": "女性客户购买最多的一级品类是什么（按销量）？",
+   "tags": [
+    "multi_join",
+    "ranking",
+    "filter_value"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "客户",
+    "品类",
+    "购买",
+    "女性客户购买最多的一级品类是什么（按销量）？",
+    "女性",
+    "最多",
+    "销量"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "GMV",
+    "下单客户数",
+    "平均评分",
+    "访客数",
+    "净销售额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "dim_customer",
+    "fact_order",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_product",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_customer",
+    "fact_order",
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_customer.customer_id",
+    "dim_customer.gender",
+    "fact_order.customer_id",
+    "fact_order.order_id",
+    "dim_product.category_l1",
+    "dim_product.product_id",
+    "fact_order_item.quantity",
+    "fact_order_item.order_id",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT dp.category_l1 AS 一级品类\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dc.gender = '女'\nGROUP BY dp.category_l1\nORDER BY SUM(foi.quantity) DESC\nLIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT dp.category_l1 AS 一级品类\nFROM fact_order fo\nJOIN fact_order_item foi ON fo.order_id = foi.order_id\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dc.gender = '女'\nGROUP BY dp.category_l1\nORDER BY SUM(foi.quantity) DESC\nLIMIT 1",
+   "pred_rows": [
+    {
+     "一级品类": "食品生鲜"
+    }
+   ],
+   "latency_s": 11.58,
+   "llm_calls": 6,
+   "input_tokens": 12893,
+   "output_tokens": 208,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g03",
+   "question": "新客订单的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "订单",
+    "新客订单的客单价是多少？",
+    "单价"
+   ],
+   "retrieved_metrics": [
+    "新客订单占比",
+    "客单价",
+    "下单客户数",
+    "连带率",
+    "平均评分",
+    "订单数",
+    "GMV",
+    "实付金额",
+    "好评率",
+    "用券订单占比"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_customer",
+    "dim_coupon",
+    "dim_channel",
+    "fact_order_item",
+    "fact_refund",
+    "fact_traffic",
+    "dim_date",
+    "dim_product",
+    "dim_shop",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.is_new_customer",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nWHERE t1.is_new_customer = 1 AND t1.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t1.pay_amount) / COUNT(*) AS 客单价\nFROM fact_order t1\nWHERE t1.is_new_customer = 1 AND t1.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1463.931552
+    }
+   ],
+   "latency_s": 7.8,
+   "llm_calls": 6,
+   "input_tokens": 11737,
+   "output_tokens": 135,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g04",
+   "question": "华东地区销量最高的品牌是哪个？",
+   "tags": [
+    "multi_join",
+    "ranking",
+    "filter_value"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "华东地区",
+    "华东地区销量最高的品牌是哪个？",
+    "最高",
+    "销量",
+    "品牌"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "实付金额",
+    "净销售额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.region_name.华东"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_customer",
+    "fact_order",
+    "dim_region",
+    "fact_order_item",
+    "fact_traffic",
+    "dim_coupon",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order",
+    "dim_region",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.brand",
+    "dim_product.product_id",
+    "fact_order.region_id",
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "dim_region.region_name",
+    "dim_region.region_id",
+    "fact_order_item.quantity",
+    "fact_order_item.order_id",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT d.brand\nFROM fact_order_item f\nJOIN fact_order o ON f.order_id = o.order_id\nJOIN dim_region r ON o.region_id = r.region_id\nJOIN dim_product d ON f.product_id = d.product_id\nWHERE o.order_status != '已取消' AND r.region_name = '华东'\nGROUP BY d.brand\nORDER BY SUM(f.quantity) DESC\nLIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT d.brand\nFROM fact_order_item f\nJOIN fact_order o ON f.order_id = o.order_id\nJOIN dim_region r ON o.region_id = r.region_id\nJOIN dim_product d ON f.product_id = d.product_id\nWHERE o.order_status != '已取消' AND r.region_name = '华东'\nGROUP BY d.brand\nORDER BY SUM(f.quantity) DESC\nLIMIT 1",
+   "pred_rows": [
+    {
+     "brand": "罗莱"
+    }
+   ],
+   "latency_s": 11.96,
+   "llm_calls": 6,
+   "input_tokens": 11428,
+   "output_tokens": 211,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g05",
+   "question": "各城市线级的退款率分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "各城市线级的退款率分别是多少？",
+    "城市",
+    "退款",
+    "线级"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "复购率",
+    "净销售额",
+    "优惠率",
+    "好评率",
+    "实付金额",
+    "用券订单占比",
+    "转化率",
+    "新客订单占比",
+    "订单数"
+   ],
+   "retrieved_values": [
+    "fact_order.order_status.已退款",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.二线",
+    "dim_region.city_tier.新一线",
+    "dim_region.city_tier.三线及以下",
+    "dim_date.weekday.周一",
+    "dim_date.weekday.周四",
+    "dim_region.province.四川省",
+    "dim_date.weekday.周五",
+    "dim_date.weekday.周二",
+    "dim_date.weekday.周三",
+    "dim_product.brand.三只松鼠",
+    "dim_channel.channel_type.第三方平台",
+    "dim_product.product_name.三只松鼠休闲零食旗舰款",
+    "dim_product.product_name.三只松鼠休闲零食入门款"
+   ],
+   "merged_tables": [
+    "fact_refund",
+    "dim_region",
+    "fact_order",
+    "fact_order_item",
+    "fact_traffic",
+    "dim_date",
+    "dim_coupon",
+    "dim_customer",
+    "dim_product",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_refund",
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_refund.order_id",
+    "dim_region.city_tier",
+    "dim_region.region_id",
+    "fact_order.order_id",
+    "fact_order.region_id"
+   ],
+   "selected_metrics": [
+    "退款率"
+   ],
+   "first_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  COUNT(fr.order_id) * 1.0 / COUNT(fo.order_id) AS 退款率\nFROM dim_region dr\nINNER JOIN fact_order fo ON dr.region_id = fo.region_id\nLEFT JOIN fact_refund fr ON fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.city_tier",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  COUNT(fr.order_id) * 1.0 / COUNT(fo.order_id) AS 退款率\nFROM dim_region dr\nINNER JOIN fact_order fo ON dr.region_id = fo.region_id\nLEFT JOIN fact_refund fr ON fo.order_id = fr.order_id\nWHERE fo.order_status != '已取消'\nGROUP BY dr.city_tier",
+   "pred_rows": [
+    {
+     "城市线级": "一线",
+     "退款率": 0.04588
+    },
+    {
+     "城市线级": "新一线",
+     "退款率": 0.04547
+    },
+    {
+     "城市线级": "二线",
+     "退款率": 0.04827
+    },
+    {
+     "城市线级": "三线及以下",
+     "退款率": 0.05038
+    }
+   ],
+   "latency_s": 9.18,
+   "llm_calls": 6,
+   "input_tokens": 11895,
+   "output_tokens": 221,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g06",
+   "question": "用了优惠券的订单的客单价是多少？",
+   "tags": [
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "优惠券",
+    "订单",
+    "单价",
+    "用了优惠券的订单的客单价是多少？"
+   ],
+   "retrieved_metrics": [
+    "用券订单占比",
+    "优惠率",
+    "客单价",
+    "连带率",
+    "订单数",
+    "平均评分",
+    "GMV",
+    "好评率",
+    "实付金额",
+    "转化率",
+    "下单客户数",
+    "净销售额",
+    "新客订单占比"
+   ],
+   "retrieved_values": [
+    "dim_coupon.coupon_type.新人券",
+    "dim_coupon.coupon_type.满减券",
+    "dim_coupon.coupon_type.无门槛券",
+    "dim_coupon.coupon_name.无门槛5元券",
+    "dim_coupon.coupon_name.无门槛15元券",
+    "dim_coupon.coupon_name.无门槛30元券"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "dim_coupon",
+    "fact_order_item",
+    "fact_refund",
+    "dim_date",
+    "dim_shop",
+    "dim_channel",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.coupon_id",
+    "fact_order.pay_amount"
+   ],
+   "selected_metrics": [
+    "客单价"
+   ],
+   "first_sql": "SELECT SUM(fact_order.gross_amount) / COUNT(*) AS 客单价\nFROM fact_order\nWHERE fact_order.coupon_id IS NOT NULL AND fact_order.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(fact_order.gross_amount) / COUNT(*) AS 客单价\nFROM fact_order\nWHERE fact_order.coupon_id IS NOT NULL AND fact_order.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "客单价": 1452.11853
+    }
+   ],
+   "latency_s": 8.21,
+   "llm_calls": 6,
+   "input_tokens": 11387,
+   "output_tokens": 140,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g07",
+   "question": "各快递公司的平均配送时长分别是多少？",
+   "tags": [
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "快递",
+    "平均",
+    "公司",
+    "各快递公司的平均配送时长分别是多少？",
+    "配送"
+   ],
+   "retrieved_metrics": [
+    "平均配送时长",
+    "平均评分"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_shop",
+    "dim_product",
+    "dim_channel"
+   ],
+   "final_tables": [
+    "fact_order"
+   ],
+   "final_columns": [
+    "fact_order.carrier",
+    "fact_order.delivery_days",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "平均配送时长"
+   ],
+   "first_sql": "SELECT carrier AS 快递公司, AVG(delivery_days) AS 平均配送时长 FROM fact_order WHERE order_status != '已取消' GROUP BY carrier;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT carrier AS 快递公司, AVG(delivery_days) AS 平均配送时长 FROM fact_order WHERE order_status != '已取消' GROUP BY carrier;",
+   "pred_rows": [
+    {
+     "快递公司": "顺丰",
+     "平均配送时长": 1.9809
+    },
+    {
+     "快递公司": "京东物流",
+     "平均配送时长": 2.5423
+    },
+    {
+     "快递公司": "韵达",
+     "平均配送时长": 2.5218
+    },
+    {
+     "快递公司": "圆通",
+     "平均配送时长": 2.5269
+    },
+    {
+     "快递公司": "中通",
+     "平均配送时长": 2.5413
+    }
+   ],
+   "latency_s": 8.44,
+   "llm_calls": 6,
+   "input_tokens": 7664,
+   "output_tokens": 127,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 5,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g08",
+   "question": "各年龄段客户的有效订单数分别是多少？",
+   "tags": [
+    "metric_caliber"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "客户",
+    "各年龄段客户的有效订单数分别是多少？",
+    "年龄段",
+    "订单数",
+    "有效"
+   ],
+   "retrieved_metrics": [
+    "平均评分",
+    "下单客户数",
+    "访客数",
+    "订单数",
+    "客单价",
+    "连带率",
+    "GMV",
+    "转化率",
+    "用券订单占比",
+    "好评率",
+    "新客订单占比",
+    "实付金额",
+    "复购率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_product",
+    "dim_date"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_customer"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.customer_id",
+    "dim_customer.customer_id",
+    "dim_customer.age_group"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT dc.age_group AS 年龄段, COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消'\nGROUP BY dc.age_group",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT dc.age_group AS 年龄段, COUNT(DISTINCT fo.order_id) AS 有效订单数\nFROM fact_order fo\nJOIN dim_customer dc ON fo.customer_id = dc.customer_id\nWHERE fo.order_status != '已取消'\nGROUP BY dc.age_group",
+   "pred_rows": [
+    {
+     "年龄段": "18-24岁",
+     "有效订单数": 14486
+    },
+    {
+     "年龄段": "25-34岁",
+     "有效订单数": 25284
+    },
+    {
+     "年龄段": "35-44岁",
+     "有效订单数": 16886
+    },
+    {
+     "年龄段": "45岁以上",
+     "有效订单数": 9969
+    }
+   ],
+   "latency_s": 8.12,
+   "llm_calls": 6,
+   "input_tokens": 11397,
+   "output_tokens": 158,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g09",
+   "question": "第三方平台渠道的退款率是多少？",
+   "tags": [
+    "filter_value",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "渠道",
+    "退款",
+    "第三方平台渠道的退款率是多少？",
+    "平台"
+   ],
+   "retrieved_metrics": [
+    "访客数",
+    "退款率",
+    "净销售额",
+    "用券订单占比",
+    "复购率",
+    "实付金额",
+    "优惠率",
+    "好评率",
+    "转化率"
+   ],
+   "retrieved_values": [
+    "dim_channel.channel_type.自营渠道",
+    "dim_channel.channel_type.第三方平台",
+    "dim_date.weekday.周三",
+    "dim_product.brand.三只松鼠",
+    "dim_region.city_tier.三线及以下",
+    "dim_product.product_name.三只松鼠休闲零食旗舰款",
+    "dim_product.product_name.三只松鼠休闲零食入门款",
+    "fact_order.order_status.已退款"
+   ],
+   "merged_tables": [
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "fact_order",
+    "dim_product",
+    "dim_customer",
+    "fact_refund",
+    "fact_order_item",
+    "dim_date",
+    "dim_coupon",
+    "dim_region"
+   ],
+   "final_tables": [
+    "dim_channel",
+    "fact_order",
+    "fact_refund"
+   ],
+   "final_columns": [
+    "dim_channel.channel_type",
+    "dim_channel.channel_id",
+    "fact_order.channel_id",
+    "fact_order.order_status",
+    "fact_refund.order_id"
+   ],
+   "selected_metrics": [
+    "退款率"
+   ],
+   "first_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 100.0 / COUNT(*) AS 退款率\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE dc.channel_type = '第三方平台'\n  AND fo.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  COUNT(CASE WHEN fo.order_status = '已退款' THEN 1 END) * 100.0 / COUNT(*) AS 退款率\nFROM fact_order fo\nJOIN dim_channel dc ON fo.channel_id = dc.channel_id\nWHERE dc.channel_type = '第三方平台'\n  AND fo.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "退款率": 5.01308
+    }
+   ],
+   "latency_s": 8.63,
+   "llm_calls": 6,
+   "input_tokens": 12139,
+   "output_tokens": 185,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g10",
+   "question": "2025年各城市线级的GMV分别是多少？",
+   "tags": [
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "城市",
+    "2025年各城市线级的GMV分别是多少？",
+    "线级"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.二线",
+    "dim_region.city_tier.新一线",
+    "dim_region.city_tier.三线及以下"
+   ],
+   "merged_tables": [
+    "dim_date",
+    "dim_region",
+    "fact_order",
+    "dim_customer",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "dim_region",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "dim_region.city_tier",
+    "dim_region.region_id",
+    "fact_order.region_id",
+    "fact_order.gross_amount",
+    "fact_order.order_status",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  SUM(fo.gross_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025 \n  AND fo.order_status != '已取消'\nGROUP BY dr.city_tier;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  dr.city_tier AS 城市线级,\n  SUM(fo.gross_amount) AS GMV\nFROM fact_order fo\nJOIN dim_region dr ON fo.region_id = dr.region_id\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE dd.year = 2025 \n  AND fo.order_status != '已取消'\nGROUP BY dr.city_tier;",
+   "pred_rows": [
+    {
+     "城市线级": "新一线",
+     "GMV": 27571656.29
+    },
+    {
+     "城市线级": "二线",
+     "GMV": 11204884.69
+    },
+    {
+     "城市线级": "一线",
+     "GMV": 12043119.27
+    },
+    {
+     "城市线级": "三线及以下",
+     "GMV": 3006999.16
+    }
+   ],
+   "latency_s": 8.34,
+   "llm_calls": 6,
+   "input_tokens": 8368,
+   "output_tokens": 204,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 4,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "g11",
+   "question": "退款原因是“尺码不合适”的退款一共退了多少钱？",
+   "tags": [
+    "filter_value"
+   ],
+   "difficulty": "easy",
+   "error": null,
+   "keywords": [
+    "合适",
+    "原因",
+    "退款原因是“尺码不合适”的退款一共退了多少钱？",
+    "尺码",
+    "退款"
+   ],
+   "retrieved_metrics": [
+    "退款率",
+    "净销售额",
+    "实付金额",
+    "好评率"
+   ],
+   "retrieved_values": [
+    "fact_refund.refund_reason.尺码不合适",
+    "fact_order.order_status.已退款",
+    "dim_date.weekday.周一",
+    "dim_region.city_tier.一线",
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "fact_refund",
+    "dim_coupon",
+    "fact_order_item",
+    "dim_date",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_refund"
+   ],
+   "final_columns": [
+    "fact_refund.refund_reason",
+    "fact_refund.refund_amount"
+   ],
+   "selected_metrics": [
+    "实付金额"
+   ],
+   "first_sql": "SELECT SUM(refund_amount) AS 退款金额 FROM fact_refund WHERE refund_reason = '尺码不合适';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(refund_amount) AS 退款金额 FROM fact_refund WHERE refund_reason = '尺码不合适';",
+   "pred_rows": [
+    {
+     "退款金额": 305034.34
+    }
+   ],
+   "latency_s": 6.92,
+   "llm_calls": 6,
+   "input_tokens": 7978,
+   "output_tokens": 99,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h01",
+   "question": "2025年的GMV同比增长了多少？",
+   "tags": [
+    "ratio",
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "2025年的GMV同比增长了多少？",
+    "增长"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_customer",
+    "dim_date",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.order_status",
+    "fact_order.pay_amount",
+    "fact_order.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  (SUM(CASE WHEN d.year = 2025 THEN f.pay_amount END) - SUM(CASE WHEN d.year = 2024 THEN f.pay_amount END)) / NULLIF(SUM(CASE WHEN d.year = 2024 THEN f.pay_amount END), 0) * 100 AS `GMV同比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year IN (2024, 2025)\n  AND f.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  (SUM(CASE WHEN d.year = 2025 THEN f.pay_amount END) - SUM(CASE WHEN d.year = 2024 THEN f.pay_amount END)) / NULLIF(SUM(CASE WHEN d.year = 2024 THEN f.pay_amount END), 0) * 100 AS `GMV同比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year IN (2024, 2025)\n  AND f.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV同比增长率": 22.892233
+    }
+   ],
+   "latency_s": 10.04,
+   "llm_calls": 6,
+   "input_tokens": 7353,
+   "output_tokens": 237,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h02",
+   "question": "本月GMV环比上个月增长了多少？",
+   "tags": [
+    "ratio",
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "GMV",
+    "增长",
+    "本月GMV环比上个月增长了多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_traffic",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.month",
+    "dim_date.date_id",
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  (SUM(CASE WHEN d.month = MONTH(CURDATE()) THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END), 0) AS `GMV环比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = YEAR(CURDATE()) \n  AND d.month IN (MONTH(CURDATE()), MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)))\n  AND f.order_status != '已取消';",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  (SUM(CASE WHEN d.month = MONTH(CURDATE()) THEN f.pay_amount ELSE 0 END) - SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END)) / NULLIF(SUM(CASE WHEN d.month = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN f.pay_amount ELSE 0 END), 0) AS `GMV环比增长率`\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE d.year = YEAR(CURDATE()) \n  AND d.month IN (MONTH(CURDATE()), MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)))\n  AND f.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV环比增长率": null
+    }
+   ],
+   "latency_s": 10.67,
+   "llm_calls": 6,
+   "input_tokens": 9591,
+   "output_tokens": 265,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h03",
+   "question": "手机数码品类的销售额占总销售额的比例是多少？",
+   "tags": [
+    "multi_join",
+    "ratio",
+    "filter_value"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "比例",
+    "手机",
+    "数码",
+    "品类",
+    "销售额",
+    "手机数码品类的销售额占总销售额的比例是多少？"
+   ],
+   "retrieved_metrics": [
+    "连带率",
+    "GMV",
+    "新客订单占比",
+    "用券订单占比",
+    "好评率",
+    "转化率",
+    "退款率",
+    "订单数",
+    "优惠率",
+    "实付金额",
+    "下单客户数",
+    "净销售额",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [
+    "dim_product.category_l2.手机",
+    "dim_shop.main_category.手机数码",
+    "dim_product.category_l1.手机数码",
+    "dim_product.product_name.苹果手机入门款",
+    "dim_product.product_name.苹果手机标准款",
+    "dim_product.product_name.苹果手机旗舰款",
+    "dim_product.product_name.华为手机限定款",
+    "dim_product.product_name.华为手机旗舰款",
+    "dim_product.product_name.华为手机入门款",
+    "dim_product.product_name.小米手机旗舰款",
+    "dim_product.product_name.小米手机入门款",
+    "dim_product.product_name.OPPO手机入门款",
+    "dim_product.product_name.OPPO手机旗舰款",
+    "dim_shop.shop_name.百汇数码自营店",
+    "dim_shop.shop_name.悦享数码旗舰店",
+    "dim_shop.shop_name.臻品数码专营店"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "fact_order_item",
+    "fact_order",
+    "fact_traffic",
+    "dim_date",
+    "dim_customer",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item"
+   ],
+   "final_columns": [
+    "dim_product.category_l1",
+    "dim_product.product_id",
+    "fact_order_item.item_amount",
+    "fact_order_item.product_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT \n  SUM(CASE WHEN dp.category_l1 = '手机数码' THEN foi.item_amount ELSE 0 END) / SUM(foi.item_amount) AS `手机数码品类销售额占比`\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT \n  SUM(CASE WHEN dp.category_l1 = '手机数码' THEN foi.item_amount ELSE 0 END) / SUM(foi.item_amount) AS `手机数码品类销售额占比`\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id;",
+   "pred_rows": [
+    {
+     "手机数码品类销售额占比": 0.561592
+    }
+   ],
+   "latency_s": 10.0,
+   "llm_calls": 6,
+   "input_tokens": 12043,
+   "output_tokens": 161,
+   "ex": false,
+   "reason": "missing_column: gold col 0 has no matching result column",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h04",
+   "question": "2025年平均每个客户下了多少个有效订单？",
+   "tags": [
+    "ratio",
+    "time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "有效",
+    "客户",
+    "平均",
+    "订单",
+    "2025年平均每个客户下了多少个有效订单？"
+   ],
+   "retrieved_metrics": [
+    "客单价",
+    "订单数",
+    "下单客户数",
+    "连带率",
+    "平均评分",
+    "新客订单占比",
+    "访客数",
+    "复购率",
+    "好评率",
+    "平均配送时长",
+    "转化率",
+    "用券订单占比",
+    "实付金额"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_product",
+    "fact_refund",
+    "fact_order_item",
+    "dim_customer",
+    "dim_channel",
+    "dim_shop",
+    "fact_traffic",
+    "dim_date",
+    "dim_coupon"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_status",
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "fact_order.customer_id",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "订单数",
+    "下单客户数"
+   ],
+   "first_sql": "SELECT COUNT(*) / COUNT(DISTINCT customer_id) AS `2025年平均每个客户下的有效订单数`\nFROM fact_order\nWHERE order_status != '已取消' AND date_id >= 20250101 AND date_id <= 20251231;",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT COUNT(*) / COUNT(DISTINCT customer_id) AS `2025年平均每个客户下的有效订单数`\nFROM fact_order\nWHERE order_status != '已取消' AND date_id >= 20250101 AND date_id <= 20251231;",
+   "pred_rows": [
+    {
+     "2025年平均每个客户下的有效订单数": 3.8146
+    }
+   ],
+   "latency_s": 9.57,
+   "llm_calls": 6,
+   "input_tokens": 11588,
+   "output_tokens": 185,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h05",
+   "question": "2025年哪个月的新客订单最多？",
+   "tags": [
+    "ranking",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "新客",
+    "订单",
+    "2025年哪个月的新客订单最多？"
+   ],
+   "retrieved_metrics": [
+    "新客订单占比",
+    "下单客户数",
+    "订单数",
+    "访客数",
+    "复购率",
+    "连带率",
+    "平均评分",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_region.city_tier.新一线"
+   ],
+   "merged_tables": [
+    "fact_order",
+    "dim_customer",
+    "dim_coupon",
+    "dim_channel",
+    "fact_order_item",
+    "fact_refund",
+    "fact_traffic",
+    "dim_date",
+    "dim_product",
+    "dim_shop",
+    "dim_region"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "fact_order.is_new_customer",
+    "dim_date.date_id",
+    "dim_date.full_date"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT MONTH(d.full_date) AS 月份, COUNT(*) AS 新客订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE f.is_new_customer = 1\n  AND d.full_date >= '2025-01-01'\n  AND d.full_date <= '2025-12-31'\nGROUP BY MONTH(d.full_date)\nORDER BY 新客订单数 DESC\nLIMIT 1",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT MONTH(d.full_date) AS 月份, COUNT(*) AS 新客订单数\nFROM fact_order f\nJOIN dim_date d ON f.date_id = d.date_id\nWHERE f.is_new_customer = 1\n  AND d.full_date >= '2025-01-01'\n  AND d.full_date <= '2025-12-31'\nGROUP BY MONTH(d.full_date)\nORDER BY 新客订单数 DESC\nLIMIT 1",
+   "pred_rows": [
+    {
+     "月份": 6,
+     "新客订单数": 427
+    }
+   ],
+   "latency_s": 9.92,
+   "llm_calls": 6,
+   "input_tokens": 11316,
+   "output_tokens": 213,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "h06",
+   "question": "2025年单日GMV最高是多少？",
+   "tags": [
+    "ranking",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "最高",
+    "GMV",
+    "2025年单日GMV最高是多少？",
+    "单日"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "转化率",
+    "实付金额",
+    "客单价"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "dim_date.full_date",
+    "dim_date.date_id"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT MAX(daily_gmv) AS `2025年单日GMV最高`\nFROM (\n    SELECT SUM(fact_order.gross_amount) AS daily_gmv\n    FROM fact_order\n    INNER JOIN dim_date ON fact_order.date_id = dim_date.date_id\n    WHERE dim_date.full_date >= '2025-01-01' AND dim_date.full_date <= '2025-12-31'\n      AND fact_order.order_status != '已取消'\n    GROUP BY dim_date.full_date\n) AS daily_gmv_summary",
+   "validate_error": null,
+   "corrected_sql": null,
+   "final_sql": "SELECT MAX(daily_gmv) AS `2025年单日GMV最高`\nFROM (\n    SELECT SUM(fact_order.gross_amount) AS daily_gmv\n    FROM fact_order\n    INNER JOIN dim_date ON fact_order.date_id = dim_date.date_id\n    WHERE dim_date.full_date >= '2025-01-01' AND dim_date.full_date <= '2025-12-31'\n      AND fact_order.order_status != '已取消'\n    GROUP BY dim_date.full_date\n) AS daily_gmv_summary",
+   "pred_rows": [
+    {
+     "2025年单日GMV最高": 774497.71
+    }
+   ],
+   "latency_s": 10.42,
+   "llm_calls": 6,
+   "input_tokens": 7659,
+   "output_tokens": 222,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  }
+ ]
+}

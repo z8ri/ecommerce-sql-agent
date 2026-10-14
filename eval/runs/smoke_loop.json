@@ -1,0 +1,531 @@
+{
+ "name": "smoke_loop",
+ "created_at": "2026-10-14T17:39:03",
+ "records": [
+  {
+   "id": "b04",
+   "question": "苹果品牌的销量是多少？",
+   "tags": [
+    "filter_value",
+    "multi_join"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "苹果",
+    "苹果品牌的销量是多少？",
+    "销量",
+    "品牌"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "下单客户数",
+    "净销售额",
+    "客单价"
+   ],
+   "retrieved_values": [
+    "dim_product.brand.苹果",
+    "dim_product.product_name.苹果手机入门款",
+    "dim_product.product_name.苹果手机标准款",
+    "dim_product.product_name.苹果手机旗舰款",
+    "dim_product.product_name.苹果智能穿戴旗舰款",
+    "dim_product.product_name.苹果智能穿戴标准款",
+    "dim_product.product_name.苹果智能穿戴限定款",
+    "dim_product.product_name.苹果电脑平板旗舰款",
+    "dim_product.product_name.苹果电脑平板标准款",
+    "dim_product.product_name.苹果电脑平板入门款"
+   ],
+   "merged_tables": [
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "fact_order_item",
+    "fact_order",
+    "fact_traffic",
+    "dim_coupon",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "dim_product",
+    "fact_order_item",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_product.brand",
+    "dim_product.product_id",
+    "fact_order_item.quantity",
+    "fact_order_item.product_id",
+    "fact_order.channel_id",
+    "fact_order.coupon_id",
+    "fact_order.customer_id",
+    "fact_order.date_id",
+    "fact_order.order_id",
+    "fact_order.region_id",
+    "fact_order.shop_id",
+    "fact_order.gross_amount",
+    "fact_order.order_status"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(foi.quantity) AS 销量\nFROM fact_order_item foi\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '苹果'\n  AND foi.order_id IN (\n    SELECT order_id\n    FROM fact_order\n    WHERE order_status != '已取消'\n  )",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 1,
+   "verify_issues": [
+    "结果复核未通过：指标口径错误：用户问的是‘销量’，即商品销售数量，SQL 使用 fact_order_item.quantity 求和是正确的；但过滤逻辑存在严重缺陷——通过子查询筛选 order_id IN (SELECT order_id FROM fact_order WHERE order_status != '已取消') 仅确保订单未被取消，但未将 fact_order_item 与 fact_order 显式 JOIN 关联，导致无法保证这些 order_id 确实存在于 fact_order_item 中（逻辑正确但执行依赖子查询语义，且缺少 JOIN 条件校验）；更严重的是：fact_order_item 表本身不包含 order_status 字段，而问题中明确要求‘统计销量’时需排除已取消订单，但销量（quantity）属于订单明细，其有效性完全依赖所属订单状态；当前 SQL 虽通过子查询间接过滤，但未在 JOIN 条件或 WHERE 中显式关联 fact_order 表，导致无法验证 order_id 是否真实存在于 fact_order 中（存在 dangling order_id 风险），且缺乏对已退款订单的处理说明——但根据指标信息，GMV 口径明确要求排除‘已取消’，未要求排除‘已退款’，而销量同理应仅排除已取消订单（因已退款订单的商品仍发生过有效销售行为）；然而，当前 SQL 缺少 fact_order 表的显式 JOIN，违反了事实表间关联的严谨性原则，易导致遗漏或误算；应改为三表 JOIN（fact_order_item → fact_order → dim_product）并在 WHERE 中过滤 order_status != '已取消'，以确保每条 quantity 均归属有效订单；此外，过滤条件中品牌值 '苹果' 与 dim_product.brand 示例值一致，无大小写或空格问题，此项合格。"
+   ],
+   "exec_errors": [],
+   "verified": true,
+   "corrected_sql": "SELECT SUM(foi.quantity) AS 销量\nFROM fact_order_item foi\nJOIN fact_order fo ON foi.order_id = fo.order_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '苹果'\n  AND fo.order_status != '已取消'",
+   "final_sql": "SELECT SUM(foi.quantity) AS 销量\nFROM fact_order_item foi\nJOIN fact_order fo ON foi.order_id = fo.order_id\nJOIN dim_product dp ON foi.product_id = dp.product_id\nWHERE dp.brand = '苹果'\n  AND fo.order_status != '已取消'",
+   "pred_rows": [
+    {
+     "销量": 4780.0
+    }
+   ],
+   "latency_s": 21.15,
+   "llm_calls": 9,
+   "input_tokens": 19100,
+   "output_tokens": 611,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "c14",
+   "question": "2025年的净销售额是多少？",
+   "tags": [
+    "metric_caliber",
+    "time",
+    "cross_fact"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "2025年的净销售额是多少？",
+    "销售额"
+   ],
+   "retrieved_metrics": [
+    "净销售额",
+    "GMV",
+    "实付金额",
+    "订单数",
+    "下单客户数",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order_item",
+    "fact_order",
+    "dim_channel",
+    "dim_product",
+    "fact_traffic",
+    "dim_shop",
+    "dim_date",
+    "dim_customer",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_columns": [
+    "fact_order.pay_amount",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.full_date",
+    "dim_date.date_id",
+    "fact_refund.date_id",
+    "fact_refund.order_id",
+    "fact_refund.refund_id",
+    "fact_refund.refund_amount"
+   ],
+   "selected_metrics": [
+    "净销售额"
+   ],
+   "first_sql": "SELECT SUM(t1.pay_amount) - COALESCE(SUM(t2.refund_amount), 0) AS `净销售额`\nFROM fact_order t1\nLEFT JOIN fact_refund t2 ON t1.order_id = t2.order_id\nINNER JOIN dim_date t3 ON t1.date_id = t3.date_id\nWHERE t1.order_status != '已取消'\n  AND t3.full_date >= '2025-01-01'\n  AND t3.full_date <= '2025-12-31';",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 2,
+   "verify_issues": [
+    "结果复核未通过：时间过滤使用了 dim_date.full_date（DATE 类型）范围 '2025-01-01' 到 '2025-12-31'，但 fact_order.date_id 是 int 类型 yyyyMMdd 格式，且表中示例值均为 2024 开头；当前数据尚未进入 2025 年（上下文 date: '2025-12-31' 仅为参考时间点，非数据截止日），dim_date 表未说明包含 2025 年数据，fact_order 表示例 date_id 全为 2024xxxx，因此 WHERE t3.full_date BETWEEN '2025-01-01' AND '2025-12-31' 极可能导致无匹配行，SUM(pay_amount) 和 SUM(refund_amount) 均为 NULL 或 0，结果虽非空但实际基于空数据集，不可信；应先确认 2025 年数据是否已入库，若未入库则结果无业务意义，需报错或提示数据不可用；当前 SQL 在无 2025 年数据时仍返回 50803503.28，存在严重数据时效性风险。",
+    "结果复核未通过：时间过滤逻辑错误：SQL 使用 dim_date.full_date 进行范围过滤（'2025-01-01' <= full_date <= '2025-12-31'），但 fact_order.date_id 是整数格式 yyyyMMdd（如 20250101），而 dim_date.date_id 才是其外键；当前 JOIN 条件 t1.date_id = t3.date_id 正确，但 WHERE 中对 t3.full_date 的过滤虽能覆盖2025年，却存在隐式依赖——若 dim_date 表中缺失部分2025年日期（如数据未加载完），会导致漏单；更健壮且符合字段语义的做法是直接用 fact_order.date_id 过滤：t1.date_id BETWEEN 20250101 AND 20251231，避免维度表完整性风险。；EXISTS 子查询冗余且无效：WHERE 中的两个 EXISTS 子句无实际过滤作用。第一个 EXISTS(SELECT 1 FROM dim_date WHERE full_date BETWEEN '2025-01-01' AND '2025-12-31') 恒为真（只要 dim_date 有任意2025年数据），第二个 EXISTS(SELECT 1 FROM fact_order WHERE date_id BETWEEN 20250101 AND 20251231) 属于非关联子查询，不约束主查询行，且无法保证主查询中 t1.order_status != '已取消' 等条件被满足；它们既不提升正确性也不增强性能，反而干扰逻辑清晰度，应删除。；退款归属逻辑未完全落实口径：指标口径明确要求‘退款按订单归属到下单日期’，当前 LEFT JOIN fact_refund ON t1.order_id = t2.order_id 是正确的（因一个订单至多一笔退款），但缺少对退款记录的时间有效性校验——fact_refund.date_id 是退款发生日期，与下单日期无关；口径强调‘归属到下单日期’，即只要订单在2025年下单，其后续发生的任何退款（无论何时退）都应扣减，当前 SQL 已满足此点（未限制 t2.date_id），故该条暂无问题；但需注意：若未来需求变为‘仅扣减2025年内发生的退款’，则需额外过滤 t2.date_id，而当前口径不要求，因此本条不构成缺陷。【此条经复核不构成问题，已排除】→ 实际有效问题为前两条。；空结果处理方式不当：CASE WHEN COUNT(*) = 0 THEN NULL ELSE ... END 在聚合后判断行数，逻辑正确，但 SUM(t1.pay_amount) - COALESCE(SUM(t2.refund_amount), 0) 在无订单时会计算为 NULL - 0 = NULL，与 CASE 效果一致；然而，当仅有已取消订单（被 WHERE 排除）且无有效订单时，COUNT(*)=0，返回 NULL 合理；但若存在有效订单但无对应退款，则 COALESCE(SUM(t2.refund_amount),0) 正确；整体聚合逻辑无误。【此条无问题】；最终结论：存在两个实质性问题——① 时间过滤应优先使用事实表 date_id 字段而非维度表 full_date，以保障数据完整性鲁棒性；② 两个 EXISTS 子句冗余且无业务意义，必须删除。"
+   ],
+   "exec_errors": [],
+   "verified": false,
+   "corrected_sql": "SELECT COALESCE(SUM(t1.pay_amount), 0) - COALESCE(SUM(t2.refund_amount), 0) AS `净销售额`\nFROM fact_order t1\nLEFT JOIN fact_refund t2 ON t1.order_id = t2.order_id\nWHERE t1.order_status != '已取消'\n  AND t1.date_id BETWEEN 20250101 AND 20251231;",
+   "final_sql": "SELECT COALESCE(SUM(t1.pay_amount), 0) - COALESCE(SUM(t2.refund_amount), 0) AS `净销售额`\nFROM fact_order t1\nLEFT JOIN fact_refund t2 ON t1.order_id = t2.order_id\nWHERE t1.order_status != '已取消'\n  AND t1.date_id BETWEEN 20250101 AND 20251231;",
+   "pred_rows": [
+    {
+     "净销售额": 50803503.28
+    }
+   ],
+   "latency_s": 61.82,
+   "llm_calls": 11,
+   "input_tokens": 25896,
+   "output_tokens": 2395,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d11",
+   "question": "上季度的GMV是多少？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "上季度的GMV是多少？",
+    "季度",
+    "GMV"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "订单数",
+    "客单价",
+    "下单客户数",
+    "实付金额",
+    "转化率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_order_item",
+    "dim_coupon",
+    "fact_refund",
+    "dim_customer",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order"
+   ],
+   "final_columns": [
+    "dim_date.quarter",
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_order.gross_amount"
+   ],
+   "selected_metrics": [
+    "GMV"
+   ],
+   "first_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_date t1\nJOIN fact_order t2 ON t1.date_id = t2.date_id\nWHERE t1.year = 2025 AND t1.quarter = 'Q3' AND t2.order_status != '已取消';",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 0,
+   "verify_issues": [],
+   "exec_errors": [],
+   "verified": true,
+   "corrected_sql": null,
+   "final_sql": "SELECT SUM(t2.gross_amount) AS GMV\nFROM dim_date t1\nJOIN fact_order t2 ON t1.date_id = t2.date_id\nWHERE t1.year = 2025 AND t1.quarter = 'Q3' AND t2.order_status != '已取消';",
+   "pred_rows": [
+    {
+     "GMV": 11553586.35
+    }
+   ],
+   "latency_s": 9.74,
+   "llm_calls": 7,
+   "input_tokens": 12541,
+   "output_tokens": 166,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "d12",
+   "question": "本季度有多少个有效订单？",
+   "tags": [
+    "time",
+    "relative_time",
+    "metric_caliber"
+   ],
+   "difficulty": "medium",
+   "error": null,
+   "keywords": [
+    "本季度有多少个有效订单？",
+    "有效",
+    "订单",
+    "本季度"
+   ],
+   "retrieved_metrics": [
+    "订单数",
+    "连带率",
+    "客单价",
+    "下单客户数",
+    "好评率",
+    "平均评分",
+    "新客订单占比",
+    "GMV",
+    "实付金额",
+    "用券订单占比",
+    "复购率",
+    "转化率",
+    "退款率"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_refund",
+    "fact_order",
+    "fact_order_item",
+    "dim_product",
+    "dim_shop",
+    "dim_channel",
+    "dim_customer",
+    "dim_date",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date"
+   ],
+   "final_columns": [
+    "fact_order.order_id",
+    "fact_order.date_id",
+    "fact_order.order_status",
+    "dim_date.date_id",
+    "dim_date.quarter"
+   ],
+   "selected_metrics": [
+    "订单数"
+   ],
+   "first_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消'\n  AND dd.year = 2025\n  AND dd.quarter = 'Q4';",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 1,
+   "verify_issues": [
+    "结果复核未通过：时间过滤条件错误：SQL 中使用了 `dd.year = 2025`，但 `dim_date` 表结构中未定义 `year` 字段（仅定义了 `date_id` 和 `quarter`），该列不存在，会导致 SQL 执行失败或隐式转换/空结果；应改用 `dd.date_id BETWEEN 20251001 AND 20251231` 或确保 `dim_date` 包含 `year` 列且已正确填充——但根据提供的表结构，`dim_date` 无 `year` 列，故当前 WHERE 条件 `dd.year = 2025` 无效，实际未按年份过滤，可能混入其他年份的 Q4 数据（如 2024Q4、2026Q4）；应删除 `dd.year = 2025`，仅保留 `dd.quarter = 'Q4'` 并通过 `fo.date_id BETWEEN 20251001 AND 20251231` 精确限定本季度范围，或确认 `dim_date` 是否有 `year` 列——但依据给定 schema，该列不存在，因此该条件必然错误。"
+   ],
+   "exec_errors": [],
+   "verified": true,
+   "corrected_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消'\n  AND fo.date_id BETWEEN 20251001 AND 20251231\n  AND dd.quarter = 'Q4';",
+   "final_sql": "SELECT COUNT(DISTINCT fo.order_id) AS 订单数\nFROM fact_order fo\nJOIN dim_date dd ON fo.date_id = dd.date_id\nWHERE fo.order_status != '已取消'\n  AND fo.date_id BETWEEN 20251001 AND 20251231\n  AND dd.quarter = 'Q4';",
+   "pred_rows": [
+    {
+     "订单数": 11478
+    }
+   ],
+   "latency_s": 19.42,
+   "llm_calls": 9,
+   "input_tokens": 16944,
+   "output_tokens": 547,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 1,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f05",
+   "question": "2025年每个月的净销售额分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "time"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "销售额",
+    "2025年每个月的净销售额分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "GMV",
+    "实付金额",
+    "订单数",
+    "下单客户数",
+    "净销售额",
+    "客单价",
+    "访客数"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "fact_order",
+    "dim_date",
+    "fact_traffic",
+    "fact_order_item",
+    "dim_channel",
+    "dim_customer",
+    "dim_shop",
+    "dim_product",
+    "fact_refund"
+   ],
+   "final_tables": [
+    "fact_order",
+    "dim_date",
+    "fact_refund"
+   ],
+   "final_columns": [
+    "fact_order.date_id",
+    "fact_order.pay_amount",
+    "fact_order.order_status",
+    "dim_date.full_date",
+    "dim_date.date_id",
+    "fact_refund.date_id",
+    "fact_refund.order_id",
+    "fact_refund.refund_id",
+    "fact_refund.refund_amount"
+   ],
+   "selected_metrics": [
+    "净销售额"
+   ],
+   "first_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(o.pay_amount) - COALESCE(SUM(r.refund_amount), 0) AS 净销售额\nFROM fact_order o\nJOIN dim_date d ON o.date_id = d.date_id\nLEFT JOIN fact_refund r ON o.date_id = r.date_id AND o.order_id = r.order_id\nWHERE o.order_status != '已取消' \n  AND d.year = 2025\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 2,
+   "verify_issues": [
+    "结果复核未通过：退款金额应归属到订单的下单日期（即 fact_order.date_id），但 SQL 中 LEFT JOIN fact_refund 使用了 r.date_id = o.date_id，而 fact_refund.date_id 是退款发生日期，非下单日期；根据指标口径‘退款按订单归属到下单日期’，应改为基于 order_id 关联退款，并确保 refund_amount 被正确归属到下单月——当前 JOIN 条件错误地将退款绑定到退款日期而非下单日期，导致退款未按订单原始月份扣减，造成净销售额计算错误；应删除 r.date_id = o.date_id 条件，仅保留 o.order_id = r.order_id 的关联（因指标明确‘一个订单至多有一笔退款’且‘可直接 LEFT JOIN 退款表’），并确保退款金额被计入对应订单的下单月份。；WHERE 条件中仅过滤了 o.order_status != '已取消'，但指标口径要求‘有效订单（排除 已取消）的 pay_amount 之和，减去这些订单对应的 refund_amount 之和’，而当前 SQL 未排除 order_status = '已退款' 的订单——虽然已退款订单通常仍存在于 fact_order 中且 pay_amount 有效，但需确认其是否应参与净销售额计算；根据常规口径及指标描述‘有效订单（排除 已取消）’，已退款订单属于已完成后退款，仍属有效订单（pay_amount 已发生，refund_amount 单独扣减），故该过滤无误；但关键问题在于：当前 JOIN 导致部分退款未匹配（因 r.date_id ≠ o.date_id），且可能因 LEFT JOIN on order_id 缺失索引或空值导致 SUM(r.refund_amount) 漏计；更稳妥做法是使用子查询或 CTE 先聚合每笔订单的 refund_amount（按 order_id），再与订单表关联，避免因 JOIN 条件错误引发的逻辑偏差。；结果中 2025 年 6 月净销售额（7867570.72）显著高于其他月份（约 2 倍），但无任何上下文表明 6 月为大促月；结合数据表描述 dim_date 支持节假日/大促筛选，而 SQL 未校验该月是否存在异常（如数据重复、测试数据注入、ETL 错误），但此属数据质量范畴，复核不强制要求；然而，该异常值可能正是由于退款未正确归属（例如大量本应归属 6 月订单的退款被错误关联到其他月份或丢失），加剧了结果不可信度——根本原因仍是 JOIN 条件错误。",
+    "结果复核未通过：指标口径要求净销售额 = 有效订单（order_status != '已取消'）的 pay_amount 总和 减去 这些订单对应的 refund_amount 总和，且退款应归属到下单日期；但SQL中 LEFT JOIN fact_refund ON o.order_id = r.order_id 会导致：若某订单无退款，r.refund_amount 为 NULL（被 COALESCE 处理），正确；但若某订单有退款，该退款金额会被计入其下单月份——这符合口径（'退款按订单归属到下单日期'），表面合理。然而，fact_refund 表中 date_id 是退款发生日期，而SQL未校验 r.date_id 是否与订单的 d.date_id 同年月，也未限制 r.order_id 必须存在于2025年订单中；更严重的是：LEFT JOIN 会将2025年订单与任意年份的退款记录关联（只要 order_id 匹配），导致2025年订单可能错误扣减2024年或2026年的退款，违反‘归属到下单日期’的语义（即仅应扣减发生在该订单生命周期内、且逻辑上可归属至该下单月份的退款）。正确做法是：在 JOIN 条件中增加 r.date_id 关联 dim_date 并确保退款记录的 year/month 与订单一致，或更稳妥地——因口径明确‘退款按订单归属到下单日期’，应直接使用订单级退款事实（即 fact_order 中应有 refund_flag 或 refund_amount 字段），但当前 schema 中没有；因此必须确保只关联那些退款日期在合理时间窗口内的记录，或依赖业务约定（如退款必发生在下单后365天内）；但SQL完全未约束退款时间，存在跨年错误扣减风险。；过滤条件中仅通过 d.year = 2025 筛选 dim_date，但 dim_date 的 year 字段未在表描述中给出类型和示例，无法确认其是否可靠（例如是否为生成字段、是否存在NULL或异常值）；更稳健的方式应基于 date_id 范围过滤（如 date_id BETWEEN 20250101 AND 20251231），因为 date_id 是主键且格式确定，避免依赖派生字段 year 的准确性。；结果中6月净销售额（7567771.86）显著高于其他月份（均在310万–421万之间），高出约120%以上，属异常波动；需检查是否6月存在数据质量问题（如测试数据注入、ETL错误、大额异常订单未过滤），但SQL未对 pay_amount 或 refund_amount 做合理性校验（如排除负值、超阈值订单），且问题未提供业务背景佐证该峰值合理，属于结果合理性存疑项；作为复核专家，当单月值偏离均值2倍标准差以上且无说明时，应标记为潜在问题。"
+   ],
+   "exec_errors": [],
+   "verified": false,
+   "corrected_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(o.pay_amount) - COALESCE(SUM(r.refund_amount), 0) AS 净销售额\nFROM fact_order o\nJOIN dim_date d ON o.date_id = d.date_id\nLEFT JOIN (\n  SELECT order_id, refund_amount \n  FROM fact_refund \n  WHERE date_id BETWEEN 20250101 AND 20251231\n) r ON o.order_id = r.order_id\nWHERE o.order_status != '已取消' \n  AND o.date_id BETWEEN 20250101 AND 20251231\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "final_sql": "SELECT \n  d.year AS 年,\n  d.month AS 月,\n  SUM(o.pay_amount) - COALESCE(SUM(r.refund_amount), 0) AS 净销售额\nFROM fact_order o\nJOIN dim_date d ON o.date_id = d.date_id\nLEFT JOIN (\n  SELECT order_id, refund_amount \n  FROM fact_refund \n  WHERE date_id BETWEEN 20250101 AND 20251231\n) r ON o.order_id = r.order_id\nWHERE o.order_status != '已取消' \n  AND o.date_id BETWEEN 20250101 AND 20251231\nGROUP BY d.year, d.month\nORDER BY d.year, d.month;",
+   "pred_rows": [
+    {
+     "年": 2025,
+     "月": 1,
+     "净销售额": 3266670.85
+    },
+    {
+     "年": 2025,
+     "月": 2,
+     "净销售额": 3103992.31
+    },
+    {
+     "年": 2025,
+     "月": 3,
+     "净销售额": 3347501.77
+    },
+    {
+     "年": 2025,
+     "月": 4,
+     "净销售额": 3335486.38
+    },
+    {
+     "年": 2025,
+     "月": 5,
+     "净销售额": 3420043.18
+    }
+   ],
+   "latency_s": 62.85,
+   "llm_calls": 11,
+   "input_tokens": 27125,
+   "output_tokens": 2405,
+   "ex": false,
+   "reason": "missing_column: gold col 1 has no matching result column",
+   "n_pred_rows": 12,
+   "attempts": 1,
+   "infra_error": false
+  },
+  {
+   "id": "f09",
+   "question": "2025年每个月的转化率分别是多少？",
+   "tags": [
+    "cross_fact",
+    "metric_caliber",
+    "ratio"
+   ],
+   "difficulty": "hard",
+   "error": null,
+   "keywords": [
+    "转化率",
+    "2025年每个月的转化率分别是多少？"
+   ],
+   "retrieved_metrics": [
+    "转化率",
+    "加购率",
+    "优惠率",
+    "复购率",
+    "用券订单占比",
+    "退款率",
+    "GMV",
+    "订单数",
+    "下单客户数"
+   ],
+   "retrieved_values": [],
+   "merged_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_tables": [
+    "dim_date",
+    "fact_order",
+    "fact_traffic"
+   ],
+   "final_columns": [
+    "dim_date.month",
+    "dim_date.year",
+    "dim_date.date_id",
+    "fact_order.order_status",
+    "fact_order.date_id",
+    "fact_order.order_id",
+    "fact_traffic.visitors",
+    "fact_traffic.date_id"
+   ],
+   "selected_metrics": [
+    "转化率"
+   ],
+   "first_sql": "SELECT \n  d.month AS 月,\n  COUNT(CASE WHEN o.order_status != '已取消' THEN o.order_id END) / SUM(t.visitors) AS 转化率\nFROM dim_date d\nINNER JOIN fact_traffic t ON d.date_id = t.date_id\nINNER JOIN fact_order o ON d.date_id = o.date_id\nWHERE d.year = 2025\nGROUP BY d.month\nORDER BY d.month;",
+   "validate_error": null,
+   "validated": true,
+   "repairs": 2,
+   "verify_issues": [
+    "结果复核未通过：指标口径错误：转化率定义为‘有效订单数除以访客数’，但SQL中对分子（COUNT）和分母（SUM）在JOIN后直接聚合，导致因事实表粒度不一致引发严重重复计算。fact_traffic按日期×店铺×渠道粒度，fact_order按订单粒度，二者无天然一对一关系；直接INNER JOIN会将单日多个订单与单日多个流量记录笛卡尔膨胀（尤其当同日多店铺/多渠道有流量时），使COUNT(order_id)被高估、SUM(visitors)也被高估（因visitors被重复累加），且二者膨胀倍数不一致，结果不可信。正确做法是：先分别按date_id聚合订单数（过滤已取消）和访客数，再通过date_id JOIN两个聚合结果，最后按月GROUP BY并计算比率。；过滤条件不完整：WHERE d.year = 2025仅约束dim_date的年份，但fact_traffic和fact_order中可能存在2025年以外的date_id（如脏数据或未来写入），应显式限制两张事实表的date_id范围（例如t.date_id BETWEEN 20250101 AND 20251231），或在JOIN后增加AND o.date_id BETWEEN 20250101 AND 20251231等条件，确保数据时间范围严格一致。；分母SUM(t.visitors)未按月聚合前去重/校验：visitors字段定义为‘当天访客数，按天去重后的访客人数’，其本身已是日粒度聚合值，SUM(t.visitors)在月粒度GROUP BY下逻辑正确；但因前述JOIN导致t.visitors被重复累加（同一日流量被多次计入不同订单行），实际分母被放大，加剧偏差。；结果合理性存疑：6月转化率（0.0127）显著低于其他月份（均值约0.027），但无业务依据支持该异常，极可能由上述重复计算导致的噪声放大所致；该异常非真实业务波动，而是技术缺陷的体现。"
+   ],
+   "exec_errors": [],
+   "verified": true,
+   "corrected_sql": "SELECT \n  d.month AS 月,\n  COALESCE(SUM(orders.valid_order_cnt), 0) / NULLIF(SUM(traffic.total_visitors), 0) AS 转化率\nFROM dim_date d\nLEFT JOIN (\n  SELECT \n    date_id,\n    COUNT(*) AS valid_order_cnt\n  FROM fact_order\n  WHERE date_id BETWEEN 20250101 AND 20251231\n    AND order_status != '已取消'\n  GROUP BY date_id\n) orders ON d.date_id = orders.date_id\nLEFT JOIN (\n  SELECT \n    date_id,\n    SUM(visitors) AS total_visitors\n  FROM fact_traffic\n  WHERE date_id BETWEEN 20250101 AND 20251231\n  GROUP BY date_id\n) traffic ON d.date_id = traffic.date_id\nWHERE d.year = 2025\nGROUP BY d.month\nORDER BY d.month;",
+   "final_sql": "SELECT \n  d.month AS 月,\n  COALESCE(SUM(orders.valid_order_cnt), 0) / NULLIF(SUM(traffic.total_visitors), 0) AS 转化率\nFROM dim_date d\nLEFT JOIN (\n  SELECT \n    date_id,\n    COUNT(*) AS valid_order_cnt\n  FROM fact_order\n  WHERE date_id BETWEEN 20250101 AND 20251231\n    AND order_status != '已取消'\n  GROUP BY date_id\n) orders ON d.date_id = orders.date_id\nLEFT JOIN (\n  SELECT \n    date_id,\n    SUM(visitors) AS total_visitors\n  FROM fact_traffic\n  WHERE date_id BETWEEN 20250101 AND 20251231\n  GROUP BY date_id\n) traffic ON d.date_id = traffic.date_id\nWHERE d.year = 2025\nGROUP BY d.month\nORDER BY d.month;",
+   "pred_rows": [
+    {
+     "月": 1,
+     "转化率": 0.0344
+    },
+    {
+     "月": 2,
+     "转化率": 0.0347
+    },
+    {
+     "月": 3,
+     "转化率": 0.0347
+    },
+    {
+     "月": 4,
+     "转化率": 0.0342
+    },
+    {
+     "月": 5,
+     "转化率": 0.0342
+    }
+   ],
+   "latency_s": 33.15,
+   "llm_calls": 10,
+   "input_tokens": 18429,
+   "output_tokens": 1138,
+   "ex": true,
+   "reason": "",
+   "n_pred_rows": 12,
+   "attempts": 1,
+   "infra_error": false
+  }
+ ]
+}
